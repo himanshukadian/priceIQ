@@ -9,6 +9,14 @@ import pandas as pd
 from src.orchestrator.interface import Orchestrator
 import os
 
+# Example queries with country
+EXAMPLES = [
+    {"label": "iPhone 16 Pro, 128GB (US)", "query": "iPhone 16 Pro, 128GB", "country": "US"},
+    {"label": "MacBook Pro (IN)", "query": "MacBook Pro", "country": "IN"},
+    {"label": "Nike Air Max 270 (UK)", "query": "Nike Air Max 270", "country": "UK"},
+    {"label": "Samsung Galaxy S24 (DE)", "query": "Samsung Galaxy S24", "country": "DE"},
+]
+
 # Page configuration
 st.set_page_config(
     page_title="🎯 Global Price Intelligence",
@@ -44,8 +52,21 @@ def main():
     st.title("🎯 Global Price Intelligence")
     st.markdown("Compare product prices across multiple e-commerce sites globally.")
     
-    # Sidebar for additional info
+    # Sidebar with example queries
     with st.sidebar:
+        st.header("🔍 Example Queries")
+        example_labels = [ex["label"] for ex in EXAMPLES]
+        example_choice = st.selectbox(
+            "Choose an example to auto-fill query and country:",
+            ["(None)"] + example_labels,
+            index=0
+        )
+        st.markdown("""
+        - `iPhone 16 Pro, 128GB` (Country: US)
+        - `MacBook Pro` (Country: IN)
+        - `Nike Air Max 270` (Country: UK)
+        - `Samsung Galaxy S24` (Country: DE)
+        """)
         st.header("ℹ️ About")
         st.markdown("""
         This platform searches across multiple e-commerce sites to find the best prices for your products.
@@ -61,22 +82,24 @@ def main():
         - 🇬🇧 UK (GBP)
         - 🇩🇪 Germany (EUR)
         """)
-        
-        st.header("🔍 Example Queries")
-        st.markdown("""
-        - `iPhone 16 Pro, 128GB`
-        - `MacBook Pro`
-        - `Nike Air Max 270`
-        - `Samsung Galaxy S24`
-        """)
     
     # Main content area
     col1, col2 = st.columns([2, 1])
+    
+    # Determine default values from example selection
+    if example_choice != "(None)":
+        selected = next(ex for ex in EXAMPLES if ex["label"] == example_choice)
+        default_query = selected["query"]
+        default_country = selected["country"]
+    else:
+        default_query = ""
+        default_country = "US"
     
     with col1:
         # Search inputs
         query = st.text_input(
             "What product are you looking for?",
+            value=default_query,
             placeholder="e.g., iPhone 16 Pro, 128GB or MacBook Pro",
             help="Enter the product name, model, and any specifications"
         )
@@ -85,6 +108,7 @@ def main():
         country = st.selectbox(
             "Select country",
             ["US", "IN", "UK", "DE"],
+            index=["US", "IN", "UK", "DE"].index(default_country) if default_country in ["US", "IN", "UK", "DE"] else 0,
             help="Choose your target market for price comparison"
         )
     

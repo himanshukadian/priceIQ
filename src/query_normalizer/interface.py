@@ -201,9 +201,12 @@ class QueryNormalizer:
                 return self.mock_outputs.get('smartphone', {}).copy()
             elif 'nike' in query_lower or 'air max' in query_lower or 'sports' in query_lower or 'shoes' in query_lower or 'running' in query_lower:
                 return self.mock_outputs.get('sports', {}).copy()
+            elif 'samsung' in query_lower or 'galaxy' in query_lower:
+                return self.mock_outputs.get('samsung', {}).copy()
             else:
                 # Default to smartphone for backward compatibility
                 return self.mock_outputs.get('smartphone', {}).copy()
+        
         # Real logic would go here
         # For now, return basic attributes based on category detection
         query_lower = query.lower()

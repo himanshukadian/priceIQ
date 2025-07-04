@@ -28,19 +28,168 @@ priceIQ/
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- Python 3.8+
-- No external dependencies (pure Python with standard library)
+### Option 1: Docker (Recommended)
 
-### Installation
+The easiest way to run the platform without any setup issues:
+
+#### Prerequisites
+- Docker and Docker Compose installed
+
+#### Quick Start with Docker
+```bash
+# Clone the repository
+git clone <repository-url>
+cd priceIQ
+
+# Build and run with Docker Compose
+docker-compose up --build
+
+# Access Streamlit frontend at: http://localhost:8501
+```
+
+#### Docker Commands
+
+**Start Streamlit frontend:**
+```bash
+docker-compose up streamlit
+```
+
+**Run CLI commands:**
+```bash
+# Execute CLI in running container
+docker-compose exec cli python3 main.py --query "iPhone 16 Pro" --country "US"
+
+# Or run a new container for CLI
+docker run --rm -v $(pwd):/app priceiq python3 main.py --query "MacBook Pro" --country "IN"
+```
+
+**Build and run manually:**
+```bash
+# Build the image
+docker build -t priceiq .
+
+# Run Streamlit
+docker run -p 8501:8501 -v $(pwd):/app priceiq
+
+# Run CLI
+docker run --rm -v $(pwd):/app priceiq python3 main.py --query "Nike Air Max 270" --country "UK"
+```
+
+**Complete Docker Workflow:**
+```bash
+# 1. Build and start all services
+docker-compose up --build -d
+
+# 2. Check service status
+docker-compose ps
+
+# 3. View logs
+docker-compose logs streamlit
+docker-compose logs cli
+
+# 4. Test CLI functionality
+docker-compose exec cli python3 main.py --query "iPhone 16 Pro" --country "US"
+docker-compose exec cli python3 main.py --query "MacBook Pro" --country "IN"
+docker-compose exec cli python3 main.py --query "Nike Air Max 270" --country "UK"
+docker-compose exec cli python3 main.py --query "Samsung Galaxy S24" --country "DE"
+
+# 5. Access Streamlit interface
+# Open http://localhost:8501 in browser
+
+# 6. Stop all services
+docker-compose down
+
+# 7. Clean up (optional)
+docker-compose down --volumes --remove-orphans
+docker system prune -f
+```
+
+**Individual Docker Commands:**
+```bash
+# Build image only
+docker build -t priceiq .
+
+# Run Streamlit with custom port
+docker run -p 8502:8501 priceiq
+
+# Run CLI with specific query
+docker run --rm priceiq python3 main.py --query "iPhone 16 Pro" --country "US"
+
+# Run CLI with JSON input file
+docker run --rm -v $(pwd):/app priceiq python3 main.py --input_file sample_input.json
+
+# Interactive shell in container
+docker run -it --rm priceiq /bin/bash
+
+# View container logs
+docker logs <container_name>
+
+# Stop specific service
+docker-compose stop streamlit
+docker-compose stop cli
+
+# Restart services
+docker-compose restart
+
+# Rebuild and restart
+docker-compose up --build --force-recreate
+```
+
+**Development Commands:**
+```bash
+# Start development mode with volume mounting
+docker-compose up -d
+
+# Make code changes (automatically reflected via volume mounting)
+
+# Test changes immediately
+docker-compose exec cli python3 main.py --query "iPhone 16 Pro" --country "US"
+
+# View real-time logs
+docker-compose logs -f streamlit
+docker-compose logs -f cli
+
+# Rebuild after dependency changes
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+**Troubleshooting Commands:**
+```bash
+# Check container status
+docker-compose ps
+
+# View detailed logs
+docker-compose logs --tail=100 streamlit
+
+# Access container shell
+docker-compose exec cli /bin/bash
+docker-compose exec streamlit /bin/bash
+
+# Check container resources
+docker stats
+
+# Clean up everything
+docker-compose down --volumes --remove-orphans
+docker system prune -a -f
+```
+
+### Option 2: Local Installation
+
+#### Prerequisites
+- Python 3.8+
+- pip
+
+#### Installation
 ```bash
 git clone <repository-url>
 cd priceIQ
+pip install -r requirements.txt
 ```
 
-### Basic Usage
+#### Basic Usage
 
-#### Using the CLI directly:
+**Using the CLI directly:**
 ```bash
 # Query with direct arguments
 python3 main.py --query "Nike Air Max 270" --country "US"
@@ -50,10 +199,15 @@ python3 main.py --query "MacBook Pro" --country "IN"
 python3 main.py --input_file sample_input.json
 ```
 
-#### Using the convenience script:
+**Using the convenience script:**
 ```bash
 chmod +x run.sh
 ./run.sh "Nike Air Max 270" "US"
+```
+
+**Using Streamlit frontend:**
+```bash
+streamlit run streamlit_app.py
 ```
 
 ## 🧩 Category-Aware Flow
@@ -121,6 +275,10 @@ The query normalizer returns different attributes based on the detected product 
 
 ## 📋 Sample Output
 
+### Example 1: iPhone 16 Pro (US)
+```bash
+python3 main.py --query "iPhone 16 Pro" --country "US"
+```
 ```json
 [
   {
@@ -142,6 +300,132 @@ The query normalizer returns different attributes based on the detected product 
     "link": "https://apple.com/iphone16pro"
   }
 ]
+```
+
+### Example 2: MacBook Pro (India)
+```bash
+python3 main.py --query "MacBook Pro" --country "IN"
+```
+```json
+[
+  {
+    "productName": "Apple MacBook Pro 14-inch",
+    "price": "159999",
+    "currency": "INR",
+    "link": "https://amazon.in/macbookpro"
+  }
+]
+```
+
+### Example 3: Nike Air Max 270 (UK)
+```bash
+python3 main.py --query "Nike Air Max 270" --country "UK"
+```
+```json
+[
+  {
+    "productName": "Nike Air Max 270",
+    "price": "120",
+    "currency": "GBP",
+    "link": "https://sportsdirect.com/nikeairmax270"
+  },
+  {
+    "productName": "Nike Air Max 270 - Black",
+    "price": "120",
+    "currency": "GBP",
+    "link": "https://sportsdirect.com/nikeairmax270-black"
+  },
+  {
+    "productName": "Nike Air Max 270",
+    "price": "130",
+    "currency": "GBP",
+    "link": "https://jdsports.co.uk/nikeairmax270"
+  },
+  {
+    "productName": "Nike Air Max 270 - White",
+    "price": "130",
+    "currency": "GBP",
+    "link": "https://jdsports.co.uk/nikeairmax270-white"
+  }
+]
+```
+
+### Example 4: Samsung Galaxy S24 (Germany)
+```bash
+python3 main.py --query "Samsung Galaxy S24" --country "DE"
+```
+```json
+[
+  {
+    "productName": "Samsung Galaxy S24",
+    "price": "899",
+    "currency": "EUR",
+    "link": "https://mediamarkt.de/samsunggalaxys24"
+  }
+]
+```
+
+### Docker Examples:
+```bash
+# All examples work in Docker containers
+docker run --rm priceiq python3 main.py --query "iPhone 16 Pro" --country "US"
+docker run --rm priceiq python3 main.py --query "MacBook Pro" --country "IN"
+docker run --rm priceiq python3 main.py --query "Nike Air Max 270" --country "UK"
+docker run --rm priceiq python3 main.py --query "Samsung Galaxy S24" --country "DE"
+
+# Or with docker-compose
+docker-compose exec cli python3 main.py --query "iPhone 16 Pro" --country "US"
+```
+
+## 🐳 Docker Support
+
+The platform includes comprehensive Docker support for easy deployment and development:
+
+### Docker Architecture
+- **Base Image**: Python 3.10-slim for lightweight containers
+- **Multi-service**: Separate containers for Streamlit frontend and CLI backend
+- **Volume Mounting**: Live code changes without rebuilding
+- **Port Mapping**: Streamlit accessible on localhost:8501
+
+### Docker Services
+
+#### Streamlit Service
+- **Purpose**: Web-based user interface
+- **Port**: 8501
+- **Features**: Real-time price comparison with country selection
+- **Access**: http://localhost:8501
+
+#### CLI Service
+- **Purpose**: Command-line interface for testing and automation
+- **Features**: Full pipeline access, batch processing
+- **Usage**: Execute commands in running container
+
+### Docker Development Workflow
+
+```bash
+# 1. Start development environment
+docker-compose up -d
+
+# 2. Make code changes (automatically reflected via volume mounting)
+
+# 3. Test CLI functionality
+docker-compose exec cli python3 main.py --query "iPhone 16 Pro" --country "US"
+
+# 4. Access Streamlit interface
+# Open http://localhost:8501 in browser
+
+# 5. Stop services
+docker-compose down
+```
+
+### Production Deployment
+
+```bash
+# Build optimized production image
+docker build -t priceiq:latest .
+
+# Run in production mode
+docker run -d -p 8501:8501 --name priceiq-app priceiq:latest
 ```
 
 ## 🔧 Module Overview
@@ -198,6 +482,43 @@ The query normalizer returns different attributes based on the detected product 
 - **Purpose**: Coordinates the entire pipeline
 - **Input**: User input (country, query)
 - **Output**: Final ranked product results
+
+## 🚀 Quick Reference
+
+### Essential Commands
+```bash
+# Local Development
+python3 main.py --query "iPhone 16 Pro" --country "US"
+streamlit run streamlit_app.py
+
+# Docker Development
+docker-compose up --build
+docker-compose exec cli python3 main.py --query "iPhone 16 Pro" --country "US"
+
+# Production
+docker build -t priceiq .
+docker run -p 8501:8501 priceiq
+```
+
+### Working Examples
+```bash
+# All these queries return ranked results:
+python3 main.py --query "iPhone 16 Pro" --country "US"
+python3 main.py --query "MacBook Pro" --country "IN"
+python3 main.py --query "Nike Air Max 270" --country "UK"
+python3 main.py --query "Samsung Galaxy S24" --country "DE"
+```
+
+### Access Points
+- **Streamlit UI**: http://localhost:8501
+- **CLI**: `python3 main.py --query "<product>" --country "<country>"`
+- **Docker CLI**: `docker-compose exec cli python3 main.py --query "<product>" --country "<country>"`
+
+### Supported Countries & Categories
+- **US**: Smartphone, Laptop, Sports
+- **IN**: Smartphone, Laptop, Sports  
+- **UK**: Smartphone, Laptop, Sports
+- **DE**: Smartphone, Laptop, Sports
 - **Integration**: Calls all modules in sequence
 
 ## 🧪 Testing

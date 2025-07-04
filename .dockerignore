@@ -1,0 +1,55 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+.coverage
+
+# Development files
+*.log
+.env
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation builds
+docs/build/
+
+# Test files (keep only essential ones)
+tests/
+*.test.py
+
+# Helper scripts (not needed in container)
+fix_missing_data.py
+add_validator_data.py
+add_missing_search_data.py
+add_missing_validator_data.py
+add_samsung_validator_data.py
+
+# Docker files
+Dockerfile
+docker-compose.yaml
+.dockerignore
+
+# Snapshots (keep only latest)
+snapshots/phase1/
+
+# Streamlit cache
+.streamlit/
+.cache/ 
