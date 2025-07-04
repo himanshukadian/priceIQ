@@ -1,0 +1,20 @@
+[
+  {
+    "productName": "Apple iPhone 16 Pro 128GB - Silver",
+    "price": "979",
+    "currency": "USD",
+    "link": "https://bestbuy.com/iphone16pro"
+  },
+  {
+    "productName": "Apple iPhone 16 Pro 128GB",
+    "price": "999",
+    "currency": "USD",
+    "link": "https://amazon.com/iphone16pro"
+  },
+  {
+    "productName": "Apple iPhone 16 Pro 128GB - Natural Titanium",
+    "price": "999",
+    "currency": "USD",
+    "link": "https://apple.com/iphone16pro"
+  }
+] 

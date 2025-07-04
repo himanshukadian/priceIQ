@@ -1,0 +1,8 @@
+# Mock extracted data from Amazon iPhone page
+product_name: "Apple iPhone 16 Pro 128GB"
+price: "999.00"
+currency: "USD"
+link: "https://amazon.com/dp/B0C1234567"
+site: "amazon.com"
+extraction_timestamp: "2024-01-15T10:30:00Z"
+confidence_score: 0.95 

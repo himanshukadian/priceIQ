@@ -1,0 +1,33 @@
+# Mock data for search results
+# Maps site and query to search result URLs
+
+search_results:
+  "amazon.com":
+    "iPhone 16 Pro 128GB":
+      - "https://amazon.com/dp/B0C1234567"
+      - "https://amazon.com/dp/B0C1234568"
+      - "https://amazon.com/dp/B0C1234569"
+      
+  "bestbuy.com":
+    "iPhone 16 Pro 128GB":
+      - "https://bestbuy.com/site/apple-iphone-16-pro-128gb/123456"
+      - "https://bestbuy.com/site/apple-iphone-16-pro-128gb/123457"
+      
+  "walmart.com":
+    "iPhone 16 Pro 128GB":
+      - "https://walmart.com/ip/Apple-iPhone-16-Pro-128GB/12345678"
+      - "https://walmart.com/ip/Apple-iPhone-16-Pro-128GB/12345679"
+      
+  "amazon.co.uk":
+    "iPhone 16 Pro 128GB":
+      - "https://amazon.co.uk/dp/B0C1234567"
+      - "https://amazon.co.uk/dp/B0C1234568"
+      
+  "currys.co.uk":
+    "iPhone 16 Pro 128GB":
+      - "https://currys.co.uk/products/apple-iphone-16-pro-128gb-123456"
+      
+  "amazon.de":
+    "iPhone 16 Pro 128GB":
+      - "https://amazon.de/dp/B0C1234567"
+      - "https://amazon.de/dp/B0C1234568" 

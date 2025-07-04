@@ -1,0 +1,24 @@
+# Mock ranked results
+# Final ranked list of products sorted by price and confidence
+
+ranked_results:
+  - product_name: "Apple iPhone 16 Pro 128GB"
+    price: "989.00"
+    currency: "USD"
+    link: "https://walmart.com/ip/Apple-iPhone-16-Pro-128GB/12345678"
+    site: "walmart.com"
+    rank_score: 0.92
+    
+  - product_name: "Apple iPhone 16 Pro 128GB"
+    price: "999.00"
+    currency: "USD"
+    link: "https://amazon.com/dp/B0C1234567"
+    site: "amazon.com"
+    rank_score: 0.95
+    
+  - product_name: "Apple iPhone 16 Pro 128GB"
+    price: "1049.00"
+    currency: "USD"
+    link: "https://bestbuy.com/site/apple-iphone-16-pro-128gb/123456"
+    site: "bestbuy.com"
+    rank_score: 0.88 

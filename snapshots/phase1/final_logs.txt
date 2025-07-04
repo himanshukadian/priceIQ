@@ -1,0 +1,38 @@
+🚀 Starting price intelligence pipeline for: iPhone 16 Pro, 128GB in US
+📝 Step 1: Normalizing query...
+   Normalized: {'brand': 'Apple', 'model': 'iPhone 16 Pro', 'storage': '128GB', 'category': 'Smartphone'}
+🌐 Step 2: Selecting websites...
+   Selected sites: ['amazon.com', 'bestbuy.com', 'apple.com']
+🔍 Step 3: Searching sites...
+   Found 3 search results
+📄 Step 4: Fetching HTML content...
+   Fetched 3 HTML contents
+🔧 Step 5: Extracting product data...
+   Extracted 3 products
+✅ Step 6: Validating products...
+   Validated 3 products
+🔄 Step 7: Deduplicating products...
+   Deduplicated: 3 → 3 products
+🏆 Step 8: Ranking products...
+   Ranked 3 products
+✅ Pipeline complete! Returning 3 ranked products
+[
+  {
+    "productName": "Apple iPhone 16 Pro 128GB - Silver",
+    "price": "979",
+    "currency": "USD",
+    "link": "https://bestbuy.com/iphone16pro"
+  },
+  {
+    "productName": "Apple iPhone 16 Pro 128GB",
+    "price": "999",
+    "currency": "USD",
+    "link": "https://amazon.com/iphone16pro"
+  },
+  {
+    "productName": "Apple iPhone 16 Pro 128GB - Natural Titanium",
+    "price": "999",
+    "currency": "USD",
+    "link": "https://apple.com/iphone16pro"
+  }
+]

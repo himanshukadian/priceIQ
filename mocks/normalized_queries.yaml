@@ -1,0 +1,25 @@
+# Mock data for query normalization
+# Maps raw queries to normalized versions
+
+queries:
+  "iPhone 16 Pro, 128GB":
+    normalized: "iPhone 16 Pro 128GB"
+    brand: "Apple"
+    model: "iPhone 16 Pro"
+    storage: "128GB"
+    category: "smartphone"
+    
+  "Samsung Galaxy S24 Ultra":
+    normalized: "Samsung Galaxy S24 Ultra"
+    brand: "Samsung"
+    model: "Galaxy S24 Ultra"
+    storage: null
+    category: "smartphone"
+    
+  "MacBook Pro 14 inch M3":
+    normalized: "MacBook Pro 14 inch M3"
+    brand: "Apple"
+    model: "MacBook Pro"
+    screen_size: "14 inch"
+    processor: "M3"
+    category: "laptop" 

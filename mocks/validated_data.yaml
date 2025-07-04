@@ -1,0 +1,27 @@
+# Mock validated data
+# Contains validated product entries with confidence scores
+
+validated_products:
+  - product_name: "Apple iPhone 16 Pro 128GB"
+    price: "999.00"
+    currency: "USD"
+    link: "https://amazon.com/dp/B0C1234567"
+    site: "amazon.com"
+    validation_score: 0.95
+    is_valid: true
+    
+  - product_name: "Apple iPhone 16 Pro 128GB"
+    price: "1049.00"
+    currency: "USD"
+    link: "https://bestbuy.com/site/apple-iphone-16-pro-128gb/123456"
+    site: "bestbuy.com"
+    validation_score: 0.92
+    is_valid: true
+    
+  - product_name: "Apple iPhone 16 Pro 128GB"
+    price: "989.00"
+    currency: "USD"
+    link: "https://walmart.com/ip/Apple-iPhone-16-Pro-128GB/12345678"
+    site: "walmart.com"
+    validation_score: 0.88
+    is_valid: true 

@@ -1,0 +1,51 @@
+# Mock data for site selection
+# Maps country and product category to relevant e-commerce sites
+
+sites:
+  US:
+    smartphone:
+      - "amazon.com"
+      - "bestbuy.com"
+      - "walmart.com"
+      - "target.com"
+    laptop:
+      - "amazon.com"
+      - "bestbuy.com"
+      - "microcenter.com"
+      - "newegg.com"
+    default:
+      - "amazon.com"
+      - "bestbuy.com"
+      - "walmart.com"
+      
+  UK:
+    smartphone:
+      - "amazon.co.uk"
+      - "currys.co.uk"
+      - "argos.co.uk"
+      - "johnlewis.com"
+    laptop:
+      - "amazon.co.uk"
+      - "currys.co.uk"
+      - "pcworld.co.uk"
+      - "laptopsdirect.co.uk"
+    default:
+      - "amazon.co.uk"
+      - "currys.co.uk"
+      - "argos.co.uk"
+      
+  DE:
+    smartphone:
+      - "amazon.de"
+      - "mediamarkt.de"
+      - "saturn.de"
+      - "otto.de"
+    laptop:
+      - "amazon.de"
+      - "mediamarkt.de"
+      - "notebooksbilliger.de"
+      - "alternate.de"
+    default:
+      - "amazon.de"
+      - "mediamarkt.de"
+      - "saturn.de" 
