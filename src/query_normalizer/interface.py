@@ -21,7 +21,7 @@ class QueryNormalizerInterface(ABC):
             country: Country code (e.g., "US", "UK", "DE")
             
         Returns:
-            Dict containing normalized query and extracted metadata
+            Dict containing normalized query and category-specific attributes
         """
         pass
 
@@ -41,13 +41,15 @@ class MockQueryNormalizer(QueryNormalizerInterface):
             if query in mock_data.get('queries', {}):
                 return mock_data['queries'][query]
             else:
-                # Default fallback
+                # Default fallback - return smartphone attributes
                 return {
                     'normalized': query,
                     'brand': None,
                     'model': None,
                     'storage': None,
-                    'category': 'default'
+                    'color': None,
+                    'screen_size': None,
+                    'category': 'Smartphone'
                 }
         except Exception:
             return {
@@ -55,7 +57,9 @@ class MockQueryNormalizer(QueryNormalizerInterface):
                 'brand': None,
                 'model': None,
                 'storage': None,
-                'category': 'default'
+                'color': None,
+                'screen_size': None,
+                'category': 'Smartphone'
             }
 
 
@@ -71,13 +75,36 @@ class RealQueryNormalizer(QueryNormalizerInterface):
         # For now, return a basic normalized version
         normalized = query.strip().replace(',', ' ').replace('  ', ' ')
         
-        return {
+        category = self._extract_category(normalized)
+        base_attrs = {
             'normalized': normalized,
             'brand': self._extract_brand(normalized),
             'model': self._extract_model(normalized),
-            'storage': self._extract_storage(normalized),
-            'category': self._extract_category(normalized)
+            'category': category
         }
+        
+        # Add category-specific attributes
+        if category == 'Smartphone':
+            base_attrs.update({
+                'storage': self._extract_storage(normalized),
+                'color': self._extract_color(normalized),
+                'screen_size': self._extract_screen_size(normalized)
+            })
+        elif category == 'Laptop':
+            base_attrs.update({
+                'storage': self._extract_storage(normalized),
+                'ram': self._extract_ram(normalized),
+                'screen_size': self._extract_screen_size(normalized),
+                'processor': self._extract_processor(normalized)
+            })
+        elif category == 'Sports':
+            base_attrs.update({
+                'size': self._extract_size(normalized),
+                'color': self._extract_color(normalized),
+                'type': self._extract_type(normalized)
+            })
+        
+        return base_attrs
     
     def _extract_brand(self, query: str) -> Optional[str]:
         """Extract brand from query."""
@@ -96,8 +123,45 @@ class RealQueryNormalizer(QueryNormalizerInterface):
     
     def _extract_category(self, query: str) -> str:
         """Extract product category from query."""
-        # TODO: Implement category extraction
-        return 'default'
+        query_lower = query.lower()
+        if 'macbook' in query_lower or 'laptop' in query_lower:
+            return 'Laptop'
+        elif 'iphone' in query_lower or 'smartphone' in query_lower or 'phone' in query_lower:
+            return 'Smartphone'
+        elif 'nike' in query_lower or 'air max' in query_lower or 'sports' in query_lower or 'shoes' in query_lower or 'running' in query_lower:
+            return 'Sports'
+        else:
+            return 'Smartphone'  # Default fallback
+    
+    def _extract_color(self, query: str) -> Optional[str]:
+        """Extract color from query."""
+        # TODO: Implement color extraction
+        return None
+    
+    def _extract_screen_size(self, query: str) -> Optional[str]:
+        """Extract screen size from query."""
+        # TODO: Implement screen size extraction
+        return None
+    
+    def _extract_ram(self, query: str) -> Optional[str]:
+        """Extract RAM from query."""
+        # TODO: Implement RAM extraction
+        return None
+    
+    def _extract_processor(self, query: str) -> Optional[str]:
+        """Extract processor from query."""
+        # TODO: Implement processor extraction
+        return None
+    
+    def _extract_size(self, query: str) -> Optional[str]:
+        """Extract size from query."""
+        # TODO: Implement size extraction
+        return None
+    
+    def _extract_type(self, query: str) -> Optional[str]:
+        """Extract type from query."""
+        # TODO: Implement type extraction
+        return None
 
 
 class QueryNormalizer:
@@ -141,9 +205,34 @@ class QueryNormalizer:
                 # Default to smartphone for backward compatibility
                 return self.mock_outputs.get('smartphone', {}).copy()
         # Real logic would go here
-        return {
-            "brand": None,
-            "model": None,
-            "storage": None,
-            "category": None
-        } 
+        # For now, return basic attributes based on category detection
+        query_lower = query.lower()
+        if 'macbook' in query_lower or 'laptop' in query_lower:
+            return {
+                "brand": None,
+                "model": None,
+                "storage": None,
+                "ram": None,
+                "screen_size": None,
+                "processor": None,
+                "category": "Laptop"
+            }
+        elif 'nike' in query_lower or 'air max' in query_lower or 'sports' in query_lower or 'shoes' in query_lower or 'running' in query_lower:
+            return {
+                "brand": None,
+                "model": None,
+                "size": None,
+                "color": None,
+                "type": None,
+                "category": "Sports"
+            }
+        else:
+            # Default to smartphone attributes
+            return {
+                "brand": None,
+                "model": None,
+                "storage": None,
+                "color": None,
+                "screen_size": None,
+                "category": "Smartphone"
+            } 

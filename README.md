@@ -58,9 +58,51 @@ chmod +x run.sh
 
 ## 🧩 Category-Aware Flow
 
+- **Query Normalizer** returns category-specific attributes based on product type
 - **Site selection** and **search agent** are category-aware: only sites that support the product category in the given country are used.
 - Not all sites return results for all products/categories/countries.
 - Missing data for a (site, category, product) is expected and handled gracefully.
+
+### Category-Specific Attributes
+
+The query normalizer returns different attributes based on the detected product category:
+
+#### Smartphone Attributes
+```json
+{
+  "brand": "Apple",
+  "model": "iPhone 16 Pro", 
+  "storage": "128GB",
+  "color": "Natural Titanium",
+  "screen_size": "6.1 inch",
+  "category": "Smartphone"
+}
+```
+
+#### Laptop Attributes
+```json
+{
+  "brand": "Apple",
+  "model": "MacBook Pro",
+  "storage": "512GB", 
+  "ram": "16GB",
+  "screen_size": "14 inch",
+  "processor": "M3 Pro",
+  "category": "Laptop"
+}
+```
+
+#### Sports Attributes
+```json
+{
+  "brand": "Nike",
+  "model": "Air Max 270",
+  "size": "US 10",
+  "color": "Black/White", 
+  "type": "Running Shoes",
+  "category": "Sports"
+}
+```
 
 ### Example: Sports Category in US
 ```python

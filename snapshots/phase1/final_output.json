@@ -88,7 +88,7 @@
     }
   },
   "pipeline_flow": {
-    "step1": "Query Normalization - Detects category from query",
+    "step1": "Query Normalization - Detects category and returns category-specific attributes",
     "step2": "Site Selection - Chooses sites supporting category in country",
     "step3": "Search Execution - Category-aware search results",
     "step4": "HTML Fetching - Retrieves content for found products",
@@ -96,6 +96,42 @@
     "step6": "Product Validation - Verifies data accuracy",
     "step7": "Deduplication - Removes duplicate entries",
     "step8": "Ranking - Sorts by best value"
+  },
+  "category_specific_attributes": {
+    "smartphone": {
+      "attributes": ["brand", "model", "storage", "color", "screen_size", "category"],
+      "example": {
+        "brand": "Apple",
+        "model": "iPhone 16 Pro",
+        "storage": "128GB",
+        "color": "Natural Titanium",
+        "screen_size": "6.1 inch",
+        "category": "Smartphone"
+      }
+    },
+    "laptop": {
+      "attributes": ["brand", "model", "storage", "ram", "screen_size", "processor", "category"],
+      "example": {
+        "brand": "Apple",
+        "model": "MacBook Pro",
+        "storage": "512GB",
+        "ram": "16GB",
+        "screen_size": "14 inch",
+        "processor": "M3 Pro",
+        "category": "Laptop"
+      }
+    },
+    "sports": {
+      "attributes": ["brand", "model", "size", "color", "type", "category"],
+      "example": {
+        "brand": "Nike",
+        "model": "Air Max 270",
+        "size": "US 10",
+        "color": "Black/White",
+        "type": "Running Shoes",
+        "category": "Sports"
+      }
+    }
   },
   "category_support": {
     "smartphone": {

@@ -5,6 +5,7 @@ This snapshot captures the complete Phase 1 implementation of the Price Intellig
 ## 🎯 What's Included
 
 ### Core Features
+- **Category-Specific Attributes**: Query normalizer returns different attributes based on product category
 - **Category-Aware Site Selection**: Only sites supporting the product category in the given country are selected
 - **Category-Aware Search Agent**: Only returns results for supported (site, category) combinations  
 - **Multi-Country Support**: US, India, UK, Germany with country-specific sites and pricing
@@ -13,10 +14,11 @@ This snapshot captures the complete Phase 1 implementation of the Price Intellig
 - **Mock-First Architecture**: All modules have mock implementations for testing
 
 ### Design Fixes Applied
-1. **Category-Aware Site Selection**: Fixed the issue where all sites were assumed to support all categories
-2. **Realistic Search Results**: Fixed the issue where all sites returned the same links for every product
-3. **Missing Data Handling**: Fixed the issue where missing HTML/data would crash the pipeline
-4. **Modular Configuration**: Updated config structure to support category-specific mappings
+1. **Category-Specific Attributes**: Fixed the issue where query normalizer returned same attributes for all categories
+2. **Category-Aware Site Selection**: Fixed the issue where all sites were assumed to support all categories
+3. **Realistic Search Results**: Fixed the issue where all sites returned the same links for every product
+4. **Missing Data Handling**: Fixed the issue where missing HTML/data would crash the pipeline
+5. **Modular Configuration**: Updated config structure to support category-specific mappings
 
 ## 📁 Files in This Snapshot
 
@@ -28,6 +30,11 @@ This snapshot captures the complete Phase 1 implementation of the Price Intellig
 - `README.md` - This documentation file
 
 ## 🧪 Test Cases Covered
+
+### Category-Specific Attributes
+- **Smartphone**: Returns storage, color, screen_size attributes
+- **Laptop**: Returns storage, ram, screen_size, processor attributes  
+- **Sports**: Returns size, color, type attributes
 
 ### Category-Aware Site Selection
 - **US Sports**: Only amazon.com, bestbuy.com, nike.com selected (not apple.com)
@@ -68,6 +75,7 @@ python3 main.py --query "iPhone 16 Pro, 128GB" --country "US"
 ## 🏗️ Architecture Highlights
 
 ### Category-Aware Design
+- **Query Normalizer**: Returns category-specific attributes (storage/color/screen_size for smartphones, ram/processor for laptops, size/type for sports)
 - **Site Selector**: Uses `sites_by_country_and_category` mapping
 - **Search Agent**: Uses category-specific `mock_results` structure
 - **Orchestrator**: Passes category to site selector for proper site selection
@@ -90,6 +98,7 @@ This snapshot provides a solid foundation for Phase 2 development:
 
 ## 📊 Validation Results
 
+✅ Category-specific attributes working correctly  
 ✅ Category-aware site selection working correctly  
 ✅ Category-aware search agent working correctly  
 ✅ Multi-country support working correctly  

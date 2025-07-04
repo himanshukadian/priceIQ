@@ -1,7 +1,7 @@
 # Query Normalizer Module
 
 ## 🧩 Purpose
-Standardizes and structures user input queries for consistent processing across the price intelligence pipeline. Converts raw text queries into structured data with extracted metadata like brand, model, storage, and category. **Category detection is built-in and not all queries map to all categories.**
+Standardizes and structures user input queries for consistent processing across the price intelligence pipeline. Converts raw text queries into structured data with extracted metadata like brand, model, and category-specific attributes. **Category detection is built-in and returns different attributes based on product type.**
 
 ## 🔁 Input & Output
 
@@ -10,12 +10,32 @@ Standardizes and structures user input queries for consistent processing across 
   - `country` (str): Country code for context (e.g., "US", "IN", "UK")
 
 - **Output**: 
-  - `Dict[str, Any]`: Structured data containing:
+  - `Dict[str, Any]`: Structured data containing category-specific attributes:
     - `normalized` (str): Cleaned query string
     - `brand` (str): Extracted brand name
     - `model` (str): Extracted model name
-    - `storage` (str): Extracted storage capacity
     - `category` (str): Product category classification (e.g., "Smartphone", "Laptop", "Sports")
+    - **Category-specific attributes** (see below)
+
+## 🏷️ Category-Specific Attributes
+
+The module returns different attributes based on the detected product category:
+
+### Smartphone Attributes
+- `storage` (str): Storage capacity (e.g., "128GB")
+- `color` (str): Device color (e.g., "Natural Titanium")
+- `screen_size` (str): Screen size (e.g., "6.1 inch")
+
+### Laptop Attributes  
+- `storage` (str): Storage capacity (e.g., "512GB")
+- `ram` (str): RAM capacity (e.g., "16GB")
+- `screen_size` (str): Screen size (e.g., "14 inch")
+- `processor` (str): Processor model (e.g., "M3 Pro")
+
+### Sports Attributes
+- `size` (str): Product size (e.g., "US 10")
+- `color` (str): Product color (e.g., "Black/White")
+- `type` (str): Product type (e.g., "Running Shoes")
 
 ## ⚙️ Mock Behavior
 
@@ -45,30 +65,34 @@ normalizer = QueryNormalizer(dict_or_path)
 # Normalize a smartphone query
 result = normalizer.normalize("iPhone 16 Pro, 128GB")
 # Returns: {
-#     "normalized": "iPhone 16 Pro 128GB",
 #     "brand": "Apple",
 #     "model": "iPhone 16 Pro",
 #     "storage": "128GB",
+#     "color": "Natural Titanium",
+#     "screen_size": "6.1 inch",
 #     "category": "Smartphone"
-# }
-
-# Normalize a sports query
-result = normalizer.normalize("Nike Air Max 270")
-# Returns: {
-#     "normalized": "Nike Air Max 270",
-#     "brand": "Nike",
-#     "model": "Air Max",
-#     "storage": "Standard",
-#     "category": "Sports"
 # }
 
 # Normalize a laptop query
 result = normalizer.normalize("MacBook Pro")
 # Returns: {
-#     "normalized": "MacBook Pro",
 #     "brand": "Apple",
 #     "model": "MacBook Pro",
 #     "storage": "512GB",
+#     "ram": "16GB",
+#     "screen_size": "14 inch",
+#     "processor": "M3 Pro",
 #     "category": "Laptop"
+# }
+
+# Normalize a sports query
+result = normalizer.normalize("Nike Air Max 270")
+# Returns: {
+#     "brand": "Nike",
+#     "model": "Air Max 270",
+#     "size": "US 10",
+#     "color": "Black/White",
+#     "type": "Running Shoes",
+#     "category": "Sports"
 # }
 ``` 
