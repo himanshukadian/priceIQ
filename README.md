@@ -26,6 +26,103 @@ priceIQ/
 └── main.py                # CLI entry point
 ```
 
+## 🔧 Module Overview
+
+### 1. Query Normalizer
+- **Purpose**: Standardizes and structures user input
+- **Input**: Raw query string (e.g., "iPhone 16 Pro, 128GB")
+- **Output**: Structured data (brand, model, storage, category)
+- **Mock Data**: `mocks/normalized_queries.yaml`
+
+### 2. Site Selector
+- **Purpose**: Determines relevant e-commerce sites by country
+- **Input**: Country code (e.g., "US")
+- **Output**: List of site domains
+- **Mock Data**: `mocks/selected_sites.yaml`
+
+### 3. Search Agent
+- **Purpose**: Finds product pages on e-commerce sites
+- **Input**: Normalized query + site list
+- **Output**: Search results with URLs and HTML file paths
+- **Mock Data**: `mocks/search_results.yaml`
+
+### 4. Scraper
+- **Purpose**: Fetches HTML content from product pages
+- **Input**: URLs and HTML file paths
+- **Output**: HTML content for extraction
+- **Mock Data**: `mocks/html/` directory
+
+### 5. Extractor
+- **Purpose**: Parses product information from HTML
+- **Input**: HTML content + URL
+- **Output**: Structured product data (name, price, currency, link)
+- **Mock Data**: `mocks/extracts/` directory
+
+### 6. Validator
+- **Purpose**: Ensures extracted data matches the original query
+- **Input**: Normalized query + extracted product data
+- **Output**: Boolean validation result
+- **Mock Data**: `mocks/validated_data.yaml`
+
+### 7. Deduplicator
+- **Purpose**: Removes duplicate product entries
+- **Input**: List of validated products
+- **Output**: Deduplicated product list
+- **Mock Data**: `mocks/deduplicated_data.yaml`
+
+### 8. Ranker
+- **Purpose**: Sorts products by best value criteria
+- **Input**: Deduplicated product list
+- **Output**: Ranked product list (best value first)
+- **Mock Data**: `mocks/ranked_results.yaml`
+
+### 9. Orchestrator
+- **Purpose**: Coordinates the entire pipeline
+- **Input**: User input (country, query)
+- **Output**: Final ranked product results
+
+### Key Configuration Options:
+- **`use_mock`**: Toggle between mock and real implementations
+- **`mock_data_path`**: Path to mock data files
+- **`sites_by_country`**: E-commerce sites per country
+- **`mock_results`**: Predefined mock outputs for testing
+
+## 🌍 Supported Countries & Categories
+
+- **Countries:** US, IN, UK, DE (easily extensible)
+- **Categories:** Smartphone, Laptop, Sports (add more by updating config and mock data)
+- **Sites:** Only those supporting the category in the country are used
+
+## 🔄 Pipeline Flow
+
+1. **Query Normalization** → Standardize user input (detects category)
+2. **Site Selection** → Choose relevant e-commerce sites for country/category
+3. **Search Execution** → Find product pages (category-aware)
+4. **HTML Fetching** → Retrieve page content
+5. **Data Extraction** → Parse product information
+6. **Product Validation** → Verify data accuracy
+7. **Deduplication** → Remove duplicate entries
+8. **Ranking** → Sort by best value
+
+### Phase 1: Enhanced Mock Data(Completed)
+- More comprehensive mock scenarios
+- Additional countries and sites
+- Edge case testing data
+
+## 🔮 Future Enhancements
+
+### Phase 2: Real Implementations
+- Web scraping with Playwright/Selenium
+- API integrations for e-commerce sites
+- LLM-based query normalization
+- Machine learning for ranking
+
+### Phase 3: Advanced Features
+- Real-time price monitoring
+- Price history tracking
+- User preference learning
+- Multi-language support
+
 ## 🚀 Quick Start
 
 ### Option 1: Docker (Recommended)
@@ -428,61 +525,6 @@ docker build -t priceiq:latest .
 docker run -d -p 8501:8501 --name priceiq-app priceiq:latest
 ```
 
-## 🔧 Module Overview
-
-### 1. Query Normalizer
-- **Purpose**: Standardizes and structures user input
-- **Input**: Raw query string (e.g., "iPhone 16 Pro, 128GB")
-- **Output**: Structured data (brand, model, storage, category)
-- **Mock Data**: `mocks/normalized_queries.yaml`
-
-### 2. Site Selector
-- **Purpose**: Determines relevant e-commerce sites by country
-- **Input**: Country code (e.g., "US")
-- **Output**: List of site domains
-- **Mock Data**: `mocks/selected_sites.yaml`
-
-### 3. Search Agent
-- **Purpose**: Finds product pages on e-commerce sites
-- **Input**: Normalized query + site list
-- **Output**: Search results with URLs and HTML file paths
-- **Mock Data**: `mocks/search_results.yaml`
-
-### 4. Scraper
-- **Purpose**: Fetches HTML content from product pages
-- **Input**: URLs and HTML file paths
-- **Output**: HTML content for extraction
-- **Mock Data**: `mocks/html/` directory
-
-### 5. Extractor
-- **Purpose**: Parses product information from HTML
-- **Input**: HTML content + URL
-- **Output**: Structured product data (name, price, currency, link)
-- **Mock Data**: `mocks/extracts/` directory
-
-### 6. Validator
-- **Purpose**: Ensures extracted data matches the original query
-- **Input**: Normalized query + extracted product data
-- **Output**: Boolean validation result
-- **Mock Data**: `mocks/validated_data.yaml`
-
-### 7. Deduplicator
-- **Purpose**: Removes duplicate product entries
-- **Input**: List of validated products
-- **Output**: Deduplicated product list
-- **Mock Data**: `mocks/deduplicated_data.yaml`
-
-### 8. Ranker
-- **Purpose**: Sorts products by best value criteria
-- **Input**: Deduplicated product list
-- **Output**: Ranked product list (best value first)
-- **Mock Data**: `mocks/ranked_results.yaml`
-
-### 9. Orchestrator
-- **Purpose**: Coordinates the entire pipeline
-- **Input**: User input (country, query)
-- **Output**: Final ranked product results
-
 ## 🚀 Quick Reference
 
 ### Essential Commands
@@ -621,29 +663,6 @@ search_agent:
     # ...
 ```
 
-### Key Configuration Options:
-- **`use_mock`**: Toggle between mock and real implementations
-- **`mock_data_path`**: Path to mock data files
-- **`sites_by_country`**: E-commerce sites per country
-- **`mock_results`**: Predefined mock outputs for testing
-
-## 🌍 Supported Countries & Categories
-
-- **Countries:** US, IN, UK, DE (easily extensible)
-- **Categories:** Smartphone, Laptop, Sports (add more by updating config and mock data)
-- **Sites:** Only those supporting the category in the country are used
-
-## 🔄 Pipeline Flow
-
-1. **Query Normalization** → Standardize user input (detects category)
-2. **Site Selection** → Choose relevant e-commerce sites for country/category
-3. **Search Execution** → Find product pages (category-aware)
-4. **HTML Fetching** → Retrieve page content
-5. **Data Extraction** → Parse product information
-6. **Product Validation** → Verify data accuracy
-7. **Deduplication** → Remove duplicate entries
-8. **Ranking** → Sort by best value
-
 ## 🚀 Development
 
 ### Adding New Modules
@@ -707,25 +726,6 @@ priceIQ/
 └── config/                    # Configuration
     └── phase1_config.yaml
 ```
-
-## 🔮 Future Enhancements
-
-### Phase 1: Enhanced Mock Data
-- More comprehensive mock scenarios
-- Additional countries and sites
-- Edge case testing data
-
-### Phase 2: Real Implementations
-- Web scraping with Playwright/Selenium
-- API integrations for e-commerce sites
-- LLM-based query normalization
-- Machine learning for ranking
-
-### Phase 3: Advanced Features
-- Real-time price monitoring
-- Price history tracking
-- User preference learning
-- Multi-language support
 
 ## 🤝 Contributing
 
