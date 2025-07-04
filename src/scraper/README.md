@@ -18,6 +18,7 @@ Fetches HTML content from product pages for downstream data extraction. Handles 
 - Controlled via `phase1_config.yaml` under `scraper.use_mock`
 - Reads predefined HTML files from the filesystem
 - Maps URLs to specific mock HTML files in `mocks/html/` directory
+- **Not all sites/products/categories will have mock HTML files. This is expected in a modular, category-aware system.**
 - Raises `FileNotFoundError` if mock HTML file doesn't exist
 - Raises `NotImplementedError` if real scraping is attempted
 
@@ -43,7 +44,7 @@ scraper = Scraper(config)
 # Fetch HTML content
 url_entry = {
     "url": "https://amazon.com/iphone16pro",
-    "html_file": "mocks/html/amazon_com_iphone.html"
+    "html_file": "mocks/html/amazon_iphone16pro.html"
 }
 html_content = scraper.fetch_html(url_entry)
 # Returns: "<!DOCTYPE html><html>...</html>"
@@ -86,7 +87,7 @@ scraper:
 
 ## Mock HTML Files
 
-The module expects mock HTML files in the `mocks/html/` directory. These files should contain realistic product page HTML structure to test the extraction pipeline effectively.
+The module expects mock HTML files in the `mocks/html/` directory. These files should contain realistic product page HTML structure to test the extraction pipeline effectively. **If a file is missing, it means the site/product/category is not supported in the current mock scenario.**
 
 ### Sample Mock Files
 - `amazon_iphone16pro.html` - Amazon product page structure
@@ -110,7 +111,7 @@ This module integrates with:
 ## Error Handling
 
 The module handles various error scenarios:
-- Missing HTML files in mock mode
+- Missing HTML files in mock mode (expected for unsupported site/category/product)
 - Network errors in real mode (future)
 - Invalid URL entries
 - Configuration issues

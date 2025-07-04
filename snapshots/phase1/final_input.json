@@ -1,4 +1,64 @@
 {
   "country": "US",
-  "query": "iPhone 16 Pro, 128GB"
+  "query": "iPhone 16 Pro, 128GB",
+  "examples": [
+    {
+      "description": "US Smartphone Query",
+      "input": {
+        "query": "iPhone 16 Pro, 128GB",
+        "country": "US"
+      }
+    },
+    {
+      "description": "US Laptop Query", 
+      "input": {
+        "query": "MacBook Pro",
+        "country": "US"
+      }
+    },
+    {
+      "description": "US Sports Query",
+      "input": {
+        "query": "Nike Air Max 270",
+        "country": "US"
+      }
+    },
+    {
+      "description": "India Smartphone Query",
+      "input": {
+        "query": "iPhone 16 Pro, 128GB",
+        "country": "IN"
+      }
+    },
+    {
+      "description": "India Laptop Query",
+      "input": {
+        "query": "MacBook Pro",
+        "country": "IN"
+      }
+    },
+    {
+      "description": "India Sports Query",
+      "input": {
+        "query": "Nike Air Max 270",
+        "country": "IN"
+      }
+    }
+  ],
+  "test_cases": [
+    {
+      "name": "US Sports Category Test",
+      "query": "Nike Air Max 270",
+      "country": "US",
+      "expected_category": "Sports",
+      "expected_sites": ["amazon.com", "bestbuy.com", "nike.com"]
+    },
+    {
+      "name": "India Laptop Category Test", 
+      "query": "MacBook Pro",
+      "country": "IN",
+      "expected_category": "Laptop",
+      "expected_sites": ["amazon.in", "flipkart.com", "croma.com", "reliancedigital.in"]
+    }
+  ]
 } 

@@ -2,6 +2,8 @@
 
 A modular, mock-first Python monorepo for global price intelligence with microservice-like components. This platform provides end-to-end price comparison capabilities across multiple e-commerce sites and countries.
 
+**Note:** Not all sites support all categories in every country. The platform is category-aware and robust to missing data for unsupported (site, category, product) combinations.
+
 ## 🏗️ Architecture
 
 The platform follows a modular microservice architecture with clear separation of concerns:
@@ -9,19 +11,19 @@ The platform follows a modular microservice architecture with clear separation o
 ```
 priceIQ/
 ├── src/                    # Core modules
-│   ├── query_normalizer/   # Normalizes user queries
-│   ├── site_selector/      # Selects sites by country
-│   ├── search_agent/       # Searches product pages
-│   ├── scraper/           # Fetches HTML content
-│   ├── extractor/         # Extracts product data
-│   ├── validator/         # Validates product matches
-│   ├── deduplicator/      # Removes duplicate products
-│   ├── ranker/           # Ranks by best value
-│   └── orchestrator/     # Coordinates the pipeline
+│   ├── query_normalizer/   # Normalizes user queries (category-aware)
+│   ├── site_selector/      # Selects sites by country & category
+│   ├── search_agent/       # Searches product pages (category-aware)
+│   ├── scraper/            # Fetches HTML content
+│   ├── extractor/          # Extracts product data
+│   ├── validator/          # Validates product matches
+│   ├── deduplicator/       # Removes duplicate products
+│   ├── ranker/             # Ranks by best value
+│   └── orchestrator/       # Coordinates the pipeline
 ├── tests/                 # Organized test suite
 ├── mocks/                 # Mock data and HTML files
-├── config/               # Configuration files
-└── main.py               # CLI entry point
+├── config/                # Configuration files
+└── main.py                # CLI entry point
 ```
 
 ## 🚀 Quick Start
@@ -41,7 +43,8 @@ cd priceIQ
 #### Using the CLI directly:
 ```bash
 # Query with direct arguments
-python3 main.py --query "iPhone 16 Pro, 128GB" --country "US"
+python3 main.py --query "Nike Air Max 270" --country "US"
+python3 main.py --query "MacBook Pro" --country "IN"
 
 # Query with JSON file
 python3 main.py --input_file sample_input.json
@@ -49,19 +52,29 @@ python3 main.py --input_file sample_input.json
 
 #### Using the convenience script:
 ```bash
-# Make script executable (first time only)
 chmod +x run.sh
-
-# Run with query and country
-./run.sh "iPhone 16 Pro, 128GB" "US"
-./run.sh "Samsung Galaxy S24" "IN"
+./run.sh "Nike Air Max 270" "US"
 ```
 
-#### Using Make:
-```bash
-make test      # Run all tests
-make run       # Run pipeline with default query
-make all       # Run tests then pipeline
+## 🧩 Category-Aware Flow
+
+- **Site selection** and **search agent** are category-aware: only sites that support the product category in the given country are used.
+- Not all sites return results for all products/categories/countries.
+- Missing data for a (site, category, product) is expected and handled gracefully.
+
+### Example: Sports Category in US
+```python
+# User query: "Nike Air Max 270" (category: Sports)
+# Country: US
+# Selected sites: ["amazon.com", "bestbuy.com", "nike.com"]
+# Only these sites will be searched for this product/category/country.
+```
+
+### Example: Laptop Category in India
+```python
+# User query: "MacBook Pro" (category: Laptop)
+# Country: IN
+# Selected sites: ["amazon.in", "flipkart.com", "croma.com", "reliancedigital.in"]
 ```
 
 ## 📋 Sample Output
@@ -192,16 +205,57 @@ make test
 ### Main Config File: `config/phase1_config.yaml`
 
 ```yaml
-mode: mock
-modules:
-  query_normalizer:
-    use_mock: true
-    mock_output:
-      brand: "Apple"
-      model: "iPhone 16 Pro"
-      storage: "128GB"
-      category: "Smartphone"
-  # ... other module configurations
+site_selector:
+  use_mock: true
+  sites_by_country_and_category:
+    US:
+      Smartphone:
+        - amazon.com
+        - bestbuy.com
+        - apple.com
+      Laptop:
+        - amazon.com
+        - bestbuy.com
+        - apple.com
+      Sports:
+        - amazon.com
+        - bestbuy.com
+        - nike.com
+    IN:
+      Smartphone:
+        - amazon.in
+        - flipkart.com
+        - croma.com
+        - reliancedigital.in
+      Laptop:
+        - amazon.in
+        - flipkart.com
+        - croma.com
+        - reliancedigital.in
+      Sports:
+        - amazon.in
+        - flipkart.com
+        - paytmmall.com
+        - snapdeal.com
+    # ... other countries
+search_agent:
+  use_mock: true
+  mock_results:
+    amazon.com:
+      Smartphone:
+        - url: https://amazon.com/iphone16pro
+          html_file: mocks/html/amazon_iphone16pro.html
+      Laptop:
+        - url: https://amazon.com/macbookpro
+          html_file: mocks/html/amazon_macbookpro.html
+      Sports:
+        - url: https://amazon.com/nikeairmax
+          html_file: mocks/html/amazon_nikeairmax.html
+    nike.com:
+      Sports:
+        - url: https://nike.com/airmax270
+          html_file: mocks/html/nike_airmax270.html
+    # ...
 ```
 
 ### Key Configuration Options:
@@ -210,20 +264,17 @@ modules:
 - **`sites_by_country`**: E-commerce sites per country
 - **`mock_results`**: Predefined mock outputs for testing
 
-## 🌍 Supported Countries
+## 🌍 Supported Countries & Categories
 
-| Country | Code | Sites | Currency |
-|---------|------|-------|----------|
-| United States | US | amazon.com, bestbuy.com, apple.com | USD |
-| India | IN | flipkart.com, croma.com, reliancedigital.in | INR |
-| United Kingdom | UK | amazon.co.uk, currys.co.uk, argos.co.uk | GBP |
-| Germany | DE | amazon.de, mediamarkt.de, saturn.de | EUR |
+- **Countries:** US, IN, UK, DE (easily extensible)
+- **Categories:** Smartphone, Laptop, Sports (add more by updating config and mock data)
+- **Sites:** Only those supporting the category in the country are used
 
 ## 🔄 Pipeline Flow
 
-1. **Query Normalization** → Standardize user input
-2. **Site Selection** → Choose relevant e-commerce sites
-3. **Search Execution** → Find product pages
+1. **Query Normalization** → Standardize user input (detects category)
+2. **Site Selection** → Choose relevant e-commerce sites for country/category
+3. **Search Execution** → Find product pages (category-aware)
 4. **HTML Fetching** → Retrieve page content
 5. **Data Extraction** → Parse product information
 6. **Product Validation** → Verify data accuracy

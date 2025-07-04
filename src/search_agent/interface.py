@@ -95,14 +95,29 @@ class SearchAgent:
         """
         if self.use_mock:
             results = []
+            category = query.get('category', 'Smartphone')
+            
             for site in sites:
                 if site in self.mock_results:
-                    for result in self.mock_results[site]:
-                        results.append({
-                            "site": site,
-                            "url": result.get("url", ""),
-                            "html_file": result.get("html_file", "")
-                        })
+                    site_results = self.mock_results[site]
+                    
+                    # Check if site has category-specific results
+                    if isinstance(site_results, dict) and category in site_results:
+                        # Category-specific results
+                        for result in site_results[category]:
+                            results.append({
+                                "site": site,
+                                "url": result.get("url", ""),
+                                "html_file": result.get("html_file", "")
+                            })
+                    elif isinstance(site_results, list):
+                        # Legacy format - all results for site
+                        for result in site_results:
+                            results.append({
+                                "site": site,
+                                "url": result.get("url", ""),
+                                "html_file": result.get("html_file", "")
+                            })
             return results
         else:
             # TODO: Real implementation would use LLM or site search APIs

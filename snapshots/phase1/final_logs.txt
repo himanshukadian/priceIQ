@@ -1,14 +1,58 @@
+# Phase 1 Final Logs Snapshot
+# Captures the complete category-aware, multi-country, multi-category pipeline execution
+
+## Example 1: US Sports Category - Nike Air Max 270
+🚀 Starting price intelligence pipeline for: Nike Air Max 270 in US
+📝 Step 1: Normalizing query...
+   Normalized: {'brand': 'Nike', 'model': 'Air Max', 'storage': 'Standard', 'category': 'Sports'}
+🌐 Step 2: Selecting websites...
+   Selected sites: ['amazon.com', 'bestbuy.com', 'nike.com']
+🔍 Step 3: Searching sites...
+   Found 6 search results
+📄 Step 4: Fetching HTML content...
+   Fetched 6 HTML contents
+🔧 Step 5: Extracting product data...
+   Extracted 6 products
+✅ Step 6: Validating products...
+   Validated 2 products
+🔄 Step 7: Deduplicating products...
+   Deduplicated: 2 → 2 products
+🏆 Step 8: Ranking products...
+   Ranked 2 products
+✅ Pipeline complete! Returning 2 ranked products
+
+## Example 2: India Laptop Category - MacBook Pro
+🚀 Starting price intelligence pipeline for: MacBook Pro in IN
+📝 Step 1: Normalizing query...
+   Normalized: {'brand': 'Apple', 'model': 'MacBook Pro', 'storage': '512GB', 'category': 'Laptop'}
+🌐 Step 2: Selecting websites...
+   Selected sites: ['amazon.in', 'flipkart.com', 'croma.com', 'reliancedigital.in']
+🔍 Step 3: Searching sites...
+   Found 11 search results
+📄 Step 4: Fetching HTML content...
+   Fetched 11 HTML contents
+🔧 Step 5: Extracting product data...
+   Extracted 11 products
+✅ Step 6: Validating products...
+   Validated 4 products
+🔄 Step 7: Deduplicating products...
+   Deduplicated: 4 → 1 products
+🏆 Step 8: Ranking products...
+   Ranked 1 products
+✅ Pipeline complete! Returning 1 ranked products
+
+## Example 3: US Smartphone Category - iPhone 16 Pro
 🚀 Starting price intelligence pipeline for: iPhone 16 Pro, 128GB in US
 📝 Step 1: Normalizing query...
    Normalized: {'brand': 'Apple', 'model': 'iPhone 16 Pro', 'storage': '128GB', 'category': 'Smartphone'}
 🌐 Step 2: Selecting websites...
    Selected sites: ['amazon.com', 'bestbuy.com', 'apple.com']
 🔍 Step 3: Searching sites...
-   Found 3 search results
+   Found 6 search results
 📄 Step 4: Fetching HTML content...
-   Fetched 3 HTML contents
+   Fetched 6 HTML contents
 🔧 Step 5: Extracting product data...
-   Extracted 3 products
+   Extracted 6 products
 ✅ Step 6: Validating products...
    Validated 3 products
 🔄 Step 7: Deduplicating products...
@@ -16,23 +60,33 @@
 🏆 Step 8: Ranking products...
    Ranked 3 products
 ✅ Pipeline complete! Returning 3 ranked products
-[
-  {
-    "productName": "Apple iPhone 16 Pro 128GB - Silver",
-    "price": "979",
-    "currency": "USD",
-    "link": "https://bestbuy.com/iphone16pro"
-  },
-  {
-    "productName": "Apple iPhone 16 Pro 128GB",
-    "price": "999",
-    "currency": "USD",
-    "link": "https://amazon.com/iphone16pro"
-  },
-  {
-    "productName": "Apple iPhone 16 Pro 128GB - Natural Titanium",
-    "price": "999",
-    "currency": "USD",
-    "link": "https://apple.com/iphone16pro"
-  }
-]
+
+## Key Observations:
+
+### Category-Aware Site Selection:
+- **Sports in US**: Only amazon.com, bestbuy.com, nike.com selected (not apple.com)
+- **Laptop in India**: Only amazon.in, flipkart.com, croma.com, reliancedigital.in selected (not paytmmall.com, snapdeal.com)
+- **Smartphone in US**: Only amazon.com, bestbuy.com, apple.com selected
+
+### Category-Aware Search Results:
+- **Sports**: Nike.com only returns sports products, not laptops or smartphones
+- **Laptop**: Apple.com returns laptops and smartphones, but not sports
+- **Smartphone**: All sites return smartphone variants
+
+### Robust Error Handling:
+- Missing HTML files for unsupported (site, category, product) combinations are handled gracefully
+- Pipeline continues even if some sites don't support certain categories
+- No crashes or failures due to missing data
+
+### Multi-Country Support:
+- US: USD pricing, US-specific sites
+- India: INR pricing, India-specific sites
+- Different site selections based on country and category
+
+## Design Validation:
+✅ Category-aware site selection working correctly
+✅ Category-aware search agent working correctly  
+✅ Multi-country support working correctly
+✅ Multi-category support working correctly
+✅ Error handling robust for missing data
+✅ Pipeline completes successfully for all test cases

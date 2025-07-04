@@ -1,12 +1,12 @@
 # Search Agent Module
 
 ## 🧩 Purpose
-Finds product pages on e-commerce sites based on normalized queries. Simulates the process of searching for products across multiple platforms and returning relevant URLs with associated HTML file paths for scraping.
+Finds product pages on e-commerce sites based on normalized queries. Simulates the process of searching for products across multiple platforms and returning relevant URLs with associated HTML file paths for scraping. **Not all sites return results for all categories or products.**
 
 ## 🔁 Input & Output
 
 - **Input**: 
-  - `query` (Dict[str, Any]): Normalized query from QueryNormalizer
+  - `query` (Dict[str, Any]): Normalized query from QueryNormalizer (must include `category`)
   - `sites` (List[str]): List of e-commerce site domains to search
 
 - **Output**: 
@@ -19,7 +19,7 @@ Finds product pages on e-commerce sites based on normalized queries. Simulates t
 
 - Controlled via `phase1_config.yaml` under `search_agent.use_mock`
 - Returns predefined search results from `mock_results` configuration
-- Maps sites and queries to specific URLs and HTML file paths
+- **Category-specific search results**: Only returns results for supported (site, category) combinations
 - Mock data stored in `mocks/search_results.yaml`
 
 ## 🛣️ Future Upgrade Path
@@ -40,19 +40,13 @@ from src.search_agent.interface import SearchAgent
 # Initialize with config
 agent = SearchAgent(config)
 
-# Search for products
-results = agent.search(normalized_query, ["amazon.com", "bestbuy.com"])
+# Search for products in a category
+query = {"brand": "Nike", "model": "Air Max", "category": "Sports"}
+sites = ["amazon.com", "nike.com"]
+results = agent.search(query, sites)
 # Returns: [
-#     {
-#         "site": "amazon.com",
-#         "url": "https://amazon.com/iphone16pro",
-#         "html_file": "mocks/html/amazon_com_iphone.html"
-#     },
-#     {
-#         "site": "bestbuy.com", 
-#         "url": "https://bestbuy.com/iphone16pro",
-#         "html_file": "mocks/html/bestbuy_com_iphone.html"
-#     }
+#     {"site": "amazon.com", "url": "https://amazon.com/nikeairmax", "html_file": "mocks/html/amazon_nikeairmax.html"},
+#     {"site": "nike.com", "url": "https://nike.com/airmax270", "html_file": "mocks/html/nike_airmax270.html"}
 # ]
 ```
 
@@ -72,7 +66,7 @@ __init__(self, config)
 search(self, query: Dict[str, Any], sites: List[str]) -> List[Dict[str, Any]]
 ```
 - **Parameters**: 
-  - `query` (Dict[str, Any]) - Normalized query structure from QueryNormalizer
+  - `query` (Dict[str, Any]) - Normalized query structure from QueryNormalizer (must include `category`)
   - `sites` (List[str]) - List of e-commerce site domains to search
 - **Returns**: List[Dict[str, Any]] - List of search results with site, URL, and HTML file
 - **Purpose**: Searches for products on specified sites and returns results
@@ -80,13 +74,13 @@ search(self, query: Dict[str, Any], sites: List[str]) -> List[Dict[str, Any]]
 ## Input Structure
 
 ### Query Structure
-The query parameter should be a dictionary from the QueryNormalizer:
+The query parameter should be a dictionary from the QueryNormalizer and include a `category` key:
 ```python
 {
     "brand": "Apple",
-    "model": "iPhone 16 Pro", 
-    "storage": "128GB",
-    "category": "Smartphone"
+    "model": "MacBook Pro", 
+    "storage": "512GB",
+    "category": "Laptop"
 }
 ```
 
@@ -102,8 +96,8 @@ Each result in the returned list contains:
 ```python
 {
     "site": "amazon.com",                    # The e-commerce site domain
-    "url": "https://amazon.com/iphone16pro", # Product page URL
-    "html_file": "mocks/html/amazon_iphone16pro.html"  # Mock HTML file path
+    "url": "https://amazon.com/macbookpro", # Product page URL
+    "html_file": "mocks/html/amazon_macbookpro.html"  # Mock HTML file path
 }
 ```
 
@@ -116,14 +110,20 @@ search_agent:
   use_mock: true
   mock_results:
     amazon.com:
-      - url: https://amazon.com/iphone16pro
-        html_file: mocks/html/amazon_iphone16pro.html
-    bestbuy.com:
-      - url: https://bestbuy.com/iphone16pro
-        html_file: mocks/html/bestbuy_iphone16pro.html
-    apple.com:
-      - url: https://apple.com/iphone16pro
-        html_file: mocks/html/apple_iphone16pro.html
+      Smartphone:
+        - url: https://amazon.com/iphone16pro
+          html_file: mocks/html/amazon_iphone16pro.html
+      Laptop:
+        - url: https://amazon.com/macbookpro
+          html_file: mocks/html/amazon_macbookpro.html
+      Sports:
+        - url: https://amazon.com/nikeairmax
+          html_file: mocks/html/amazon_nikeairmax.html
+    nike.com:
+      Sports:
+        - url: https://nike.com/airmax270
+          html_file: mocks/html/nike_airmax270.html
+    # ... other sites and categories
 ```
 
 ## Integration

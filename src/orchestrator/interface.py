@@ -64,9 +64,10 @@ class Orchestrator:
         normalized_data = self.query_normalizer.normalize(query)
         print(f"   Normalized: {normalized_data}")
         
-        # Step 2: Select websites based on country
+        # Step 2: Select websites based on country and category
         print("🌐 Step 2: Selecting websites...")
-        site_list = self.site_selector.select_sources(country)
+        category = normalized_data.get('category', 'Smartphone')
+        site_list = self.site_selector.select_sources(country, category)
         print(f"   Selected sites: {site_list}")
         
         # Step 3: Search each site

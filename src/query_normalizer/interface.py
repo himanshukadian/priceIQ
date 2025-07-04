@@ -117,19 +117,29 @@ class QueryNormalizer:
         else:
             self.config = config
         self.use_mock = self.config.get('modules', {}).get('query_normalizer', {}).get('use_mock', True)
-        self.mock_output = self.config.get('modules', {}).get('query_normalizer', {}).get('mock_output', {})
+        self.mock_outputs = self.config.get('modules', {}).get('query_normalizer', {}).get('mock_outputs', {})
 
     def normalize(self, query: str) -> dict:
         """
         Normalize a product query string.
-        In mock mode, returns mock output from config.
+        In mock mode, returns mock output from config based on query content.
         Args:
             query (str): Raw product query string.
         Returns:
             dict: Normalized product info.
         """
         if self.use_mock:
-            return self.mock_output.copy()
+            # Determine category based on query content
+            query_lower = query.lower()
+            if 'macbook' in query_lower or 'laptop' in query_lower:
+                return self.mock_outputs.get('laptop', {}).copy()
+            elif 'iphone' in query_lower or 'smartphone' in query_lower or 'phone' in query_lower:
+                return self.mock_outputs.get('smartphone', {}).copy()
+            elif 'nike' in query_lower or 'air max' in query_lower or 'sports' in query_lower or 'shoes' in query_lower or 'running' in query_lower:
+                return self.mock_outputs.get('sports', {}).copy()
+            else:
+                # Default to smartphone for backward compatibility
+                return self.mock_outputs.get('smartphone', {}).copy()
         # Real logic would go here
         return {
             "brand": None,

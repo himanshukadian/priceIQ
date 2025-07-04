@@ -1,20 +1,114 @@
-[
-  {
-    "productName": "Apple iPhone 16 Pro 128GB - Silver",
-    "price": "979",
-    "currency": "USD",
-    "link": "https://bestbuy.com/iphone16pro"
+{
+  "original_output": [
+    {
+      "productName": "Apple iPhone 16 Pro 128GB - Silver",
+      "price": "979",
+      "currency": "USD",
+      "link": "https://bestbuy.com/iphone16pro"
+    },
+    {
+      "productName": "Apple iPhone 16 Pro 128GB",
+      "price": "999",
+      "currency": "USD",
+      "link": "https://amazon.com/iphone16pro"
+    },
+    {
+      "productName": "Apple iPhone 16 Pro 128GB - Natural Titanium",
+      "price": "999",
+      "currency": "USD",
+      "link": "https://apple.com/iphone16pro"
+    }
+  ],
+  "example_outputs": {
+    "us_sports": {
+      "description": "US Sports Category - Nike Air Max 270",
+      "input": {
+        "query": "Nike Air Max 270",
+        "country": "US"
+      },
+      "output": [
+        {
+          "productName": "Nike Air Max 270",
+          "price": "150",
+          "currency": "USD",
+          "link": "https://amazon.com/nikeairmax"
+        },
+        {
+          "productName": "Nike Air Max 270 - Black",
+          "price": "150",
+          "currency": "USD",
+          "link": "https://bestbuy.com/nikeairmax"
+        }
+      ],
+      "notes": "Category-aware site selection: only amazon.com, bestbuy.com, nike.com were searched"
+    },
+    "india_laptop": {
+      "description": "India Laptop Category - MacBook Pro",
+      "input": {
+        "query": "MacBook Pro",
+        "country": "IN"
+      },
+      "output": [
+        {
+          "productName": "Apple MacBook Pro 14-inch",
+          "price": "159999",
+          "currency": "INR",
+          "link": "https://amazon.in/macbookpro"
+        }
+      ],
+      "notes": "Category-aware site selection: only amazon.in, flipkart.com, croma.com, reliancedigital.in were searched"
+    },
+    "us_smartphone": {
+      "description": "US Smartphone Category - iPhone 16 Pro",
+      "input": {
+        "query": "iPhone 16 Pro, 128GB",
+        "country": "US"
+      },
+      "output": [
+        {
+          "productName": "Apple iPhone 16 Pro 128GB - Silver",
+          "price": "979",
+          "currency": "USD",
+          "link": "https://bestbuy.com/iphone16pro"
+        },
+        {
+          "productName": "Apple iPhone 16 Pro 128GB",
+          "price": "999",
+          "currency": "USD",
+          "link": "https://amazon.com/iphone16pro"
+        },
+        {
+          "productName": "Apple iPhone 16 Pro 128GB - Natural Titanium",
+          "price": "999",
+          "currency": "USD",
+          "link": "https://apple.com/iphone16pro"
+        }
+      ],
+      "notes": "Category-aware site selection: only amazon.com, bestbuy.com, apple.com were searched"
+    }
   },
-  {
-    "productName": "Apple iPhone 16 Pro 128GB",
-    "price": "999",
-    "currency": "USD",
-    "link": "https://amazon.com/iphone16pro"
+  "pipeline_flow": {
+    "step1": "Query Normalization - Detects category from query",
+    "step2": "Site Selection - Chooses sites supporting category in country",
+    "step3": "Search Execution - Category-aware search results",
+    "step4": "HTML Fetching - Retrieves content for found products",
+    "step5": "Data Extraction - Parses product information",
+    "step6": "Product Validation - Verifies data accuracy",
+    "step7": "Deduplication - Removes duplicate entries",
+    "step8": "Ranking - Sorts by best value"
   },
-  {
-    "productName": "Apple iPhone 16 Pro 128GB - Natural Titanium",
-    "price": "999",
-    "currency": "USD",
-    "link": "https://apple.com/iphone16pro"
+  "category_support": {
+    "smartphone": {
+      "sites": ["amazon.com", "bestbuy.com", "apple.com", "amazon.in", "flipkart.com", "croma.com", "reliancedigital.in"],
+      "products": ["iPhone 16 Pro", "Samsung Galaxy S24"]
+    },
+    "laptop": {
+      "sites": ["amazon.com", "bestbuy.com", "apple.com", "amazon.in", "flipkart.com", "croma.com", "reliancedigital.in"],
+      "products": ["MacBook Pro", "Dell XPS", "HP Spectre"]
+    },
+    "sports": {
+      "sites": ["amazon.com", "bestbuy.com", "nike.com", "amazon.in", "flipkart.com", "paytmmall.com", "snapdeal.com"],
+      "products": ["Nike Air Max 270", "Adidas Ultraboost", "Puma RS-X"]
+    }
   }
-] 
+} 

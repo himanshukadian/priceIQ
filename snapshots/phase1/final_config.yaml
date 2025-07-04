@@ -1,79 +1,206 @@
-# Phase 1 Configuration for Price Intelligence Platform
-# Controls mock vs real implementations for each module
+# Phase 1 Final Configuration Snapshot
+# Captures the complete category-aware, multi-country, multi-category configuration
 
 mode: mock
 modules:
   query_normalizer:
     use_mock: true
-    mock_output:
-      brand: "Apple"
-      model: "iPhone 16 Pro"
-      storage: "128GB"
-      category: "Smartphone"
+    mock_outputs:
+      smartphone:
+        brand: "Apple"
+        model: "iPhone 16 Pro"
+        storage: "128GB"
+        category: "Smartphone"
+      laptop:
+        brand: "Apple"
+        model: "MacBook Pro"
+        storage: "512GB"
+        category: "Laptop"
+      sports:
+        brand: "Nike"
+        model: "Air Max"
+        storage: "Standard"
+        category: "Sports"
     mock_data_path: "mocks/normalized_queries.yaml"
     
   site_selector:
     use_mock: true
-    sites_by_country:
+    sites_by_country_and_category:
       US:
-        - amazon.com
-        - bestbuy.com
-        - apple.com
+        Smartphone:
+          - amazon.com
+          - bestbuy.com
+          - apple.com
+        Laptop:
+          - amazon.com
+          - bestbuy.com
+          - apple.com
+        Sports:
+          - amazon.com
+          - bestbuy.com
+          - nike.com
       IN:
-        - amazon.in
-        - flipkart.com
-        - croma.com
-        - reliancedigital.in
-        - paytmmall.com
-        - snapdeal.com
-        - shopclues.com
-        - indiamart.com
+        Smartphone:
+          - amazon.in
+          - flipkart.com
+          - croma.com
+          - reliancedigital.in
+        Laptop:
+          - amazon.in
+          - flipkart.com
+          - croma.com
+          - reliancedigital.in
+        Sports:
+          - amazon.in
+          - flipkart.com
+          - paytmmall.com
+          - snapdeal.com
       UK:
-        - amazon.co.uk
-        - currys.co.uk
-        - argos.co.uk
+        Smartphone:
+          - amazon.co.uk
+          - currys.co.uk
+          - argos.co.uk
+        Laptop:
+          - amazon.co.uk
+          - currys.co.uk
+          - argos.co.uk
+        Sports:
+          - amazon.co.uk
+          - sportsdirect.com
+          - jdsports.co.uk
       DE:
-        - amazon.de
-        - mediamarkt.de
-        - saturn.de
+        Smartphone:
+          - amazon.de
+          - mediamarkt.de
+          - saturn.de
+        Laptop:
+          - amazon.de
+          - mediamarkt.de
+          - saturn.de
+        Sports:
+          - amazon.de
+          - sport24.de
+          - intersport.de
     mock_data_path: "mocks/selected_sites.yaml"
     
   search_agent:
     use_mock: true
     mock_results:
       amazon.com:
-        - url: https://amazon.com/iphone16pro
-          html_file: mocks/html/amazon_iphone16pro.html
+        Smartphone:
+          - url: https://amazon.com/iphone16pro
+            html_file: mocks/html/amazon_iphone16pro.html
+          - url: https://amazon.com/iphone16pro-silver
+            html_file: mocks/html/amazon_iphone16pro_silver.html
+        Laptop:
+          - url: https://amazon.com/macbookpro
+            html_file: mocks/html/amazon_macbookpro.html
+          - url: https://amazon.com/macbookpro-spacegray
+            html_file: mocks/html/amazon_macbookpro_spacegray.html
+        Sports:
+          - url: https://amazon.com/nikeairmax
+            html_file: mocks/html/amazon_nikeairmax.html
+          - url: https://amazon.com/nikeairmax-black
+            html_file: mocks/html/amazon_nikeairmax_black.html
       bestbuy.com:
-        - url: https://bestbuy.com/iphone16pro
-          html_file: mocks/html/bestbuy_iphone16pro.html
+        Smartphone:
+          - url: https://bestbuy.com/iphone16pro
+            html_file: mocks/html/bestbuy_iphone16pro.html
+          - url: https://bestbuy.com/iphone16pro-natural
+            html_file: mocks/html/bestbuy_iphone16pro_natural.html
+        Laptop:
+          - url: https://bestbuy.com/macbookpro
+            html_file: mocks/html/bestbuy_macbookpro.html
+          - url: https://bestbuy.com/macbookpro-silver
+            html_file: mocks/html/bestbuy_macbookpro_silver.html
+        Sports:
+          - url: https://bestbuy.com/nikeairmax
+            html_file: mocks/html/bestbuy_nikeairmax.html
+          - url: https://bestbuy.com/nikeairmax-white
+            html_file: mocks/html/bestbuy_nikeairmax_white.html
       apple.com:
-        - url: https://apple.com/iphone16pro
-          html_file: mocks/html/apple_iphone16pro.html
+        Smartphone:
+          - url: https://apple.com/iphone16pro
+            html_file: mocks/html/apple_iphone16pro.html
+          - url: https://apple.com/iphone16pro-titanium
+            html_file: mocks/html/apple_iphone16pro_titanium.html
+        Laptop:
+          - url: https://apple.com/macbookpro
+            html_file: mocks/html/apple_macbookpro.html
+          - url: https://apple.com/macbookpro-spaceblack
+            html_file: mocks/html/apple_macbookpro_spaceblack.html
+      nike.com:
+        Sports:
+          - url: https://nike.com/airmax270
+            html_file: mocks/html/nike_airmax270.html
+          - url: https://nike.com/airmax270-black
+            html_file: mocks/html/nike_airmax270_black.html
       flipkart.com:
-        - url: https://flipkart.com/iphone16pro
-          html_file: mocks/html/flipkart_iphone16pro.html
+        Smartphone:
+          - url: https://flipkart.com/iphone16pro
+            html_file: mocks/html/flipkart_iphone16pro.html
+          - url: https://flipkart.com/iphone16pro-blue
+            html_file: mocks/html/flipkart_iphone16pro_blue.html
+        Laptop:
+          - url: https://flipkart.com/macbookpro
+            html_file: mocks/html/flipkart_macbookpro.html
+          - url: https://flipkart.com/macbookpro-silver
+            html_file: mocks/html/flipkart_macbookpro_silver.html
+        Sports:
+          - url: https://flipkart.com/nikeairmax
+            html_file: mocks/html/flipkart_nikeairmax.html
+          - url: https://flipkart.com/nikeairmax-red
+            html_file: mocks/html/flipkart_nikeairmax_red.html
       croma.com:
-        - url: https://croma.com/iphone16pro
-          html_file: mocks/html/croma_iphone16pro.html
+        Smartphone:
+          - url: https://croma.com/iphone16pro
+            html_file: mocks/html/croma_iphone16pro.html
+        Laptop:
+          - url: https://croma.com/macbookpro
+            html_file: mocks/html/croma_macbookpro.html
+          - url: https://croma.com/macbookpro-silver
+            html_file: mocks/html/croma_macbookpro_silver.html
+        Sports:
+          - url: https://croma.com/nikeairmax
+            html_file: mocks/html/croma_nikeairmax.html
       reliancedigital.in:
-        - url: https://reliancedigital.in/iphone16pro
-          html_file: mocks/html/reliancedigital_iphone16pro.html
+        Smartphone:
+          - url: https://reliancedigital.in/iphone16pro
+            html_file: mocks/html/reliancedigital_iphone16pro.html
+        Laptop:
+          - url: https://reliancedigital.in/macbookpro
+            html_file: mocks/html/reliancedigital_macbookpro.html
+          - url: https://reliancedigital.in/macbookpro-silver
+            html_file: mocks/html/reliancedigital_macbookpro_silver.html
+        Sports:
+          - url: https://reliancedigital.in/nikeairmax
+            html_file: mocks/html/reliancedigital_nikeairmax.html
       amazon.in:
-        - url: https://amazon.in/iphone16pro
-          html_file: mocks/html/amazon_in_iphone16pro.html
+        Smartphone:
+          - url: https://amazon.in/iphone16pro
+            html_file: mocks/html/amazon_in_iphone16pro.html
+        Laptop:
+          - url: https://amazon.in/macbookpro
+            html_file: mocks/html/amazon_in_macbookpro.html
+          - url: https://amazon.in/macbookpro-silver
+            html_file: mocks/html/amazon_in_macbookpro_silver.html
+        Sports:
+          - url: https://amazon.in/nikeairmax
+            html_file: mocks/html/amazon_in_nikeairmax.html
+          - url: https://amazon.in/nikeairmax-black
+            html_file: mocks/html/amazon_in_nikeairmax_black.html
       paytmmall.com:
-        - url: https://paytmmall.com/iphone16pro
-          html_file: mocks/html/paytmmall_iphone16pro.html
+        Sports:
+          - url: https://paytmmall.com/nikeairmax
+            html_file: mocks/html/paytmmall_nikeairmax.html
+          - url: https://paytmmall.com/nikeairmax-black
+            html_file: mocks/html/paytmmall_nikeairmax_black.html
       snapdeal.com:
-        - url: https://snapdeal.com/iphone16pro
-          html_file: mocks/html/snapdeal_iphone16pro.html
-      shopclues.com:
-        - url: https://shopclues.com/iphone16pro
-          html_file: mocks/html/shopclues_iphone16pro.html
-      indiamart.com:
-        - url: https://indiamart.com/iphone16pro
-          html_file: mocks/html/indiamart_iphone16pro.html
+        Sports:
+          - url: https://snapdeal.com/nikeairmax
+            html_file: mocks/html/snapdeal_nikeairmax.html
+          - url: https://snapdeal.com/nikeairmax-black
+            html_file: mocks/html/snapdeal_nikeairmax_black.html
     mock_data_path: "mocks/search_results.yaml"
     
   scraper:
@@ -118,305 +245,193 @@ modules:
         price: "89999"
         currency: "INR"
         link: "https://amazon.in/iphone16pro"
-      https://paytmmall.com/iphone16pro:
-        productName: "Apple iPhone 16 Pro 128GB"
-        price: "89999"
+      https://paytmmall.com/nikeairmax:
+        productName: "Nike Air Max 270"
+        price: "12999"
         currency: "INR"
-        link: "https://paytmmall.com/iphone16pro"
-      https://snapdeal.com/iphone16pro:
-        productName: "Apple iPhone 16 Pro 128GB"
-        price: "89999"
+        link: "https://paytmmall.com/nikeairmax"
+      https://snapdeal.com/nikeairmax:
+        productName: "Nike Air Max 270"
+        price: "12999"
         currency: "INR"
-        link: "https://snapdeal.com/iphone16pro"
-      https://shopclues.com/iphone16pro:
-        productName: "Apple iPhone 16 Pro 128GB"
-        price: "89999"
-        currency: "INR"
-        link: "https://shopclues.com/iphone16pro"
+        link: "https://snapdeal.com/nikeairmax"
       https://indiamart.com/iphone16pro:
         productName: "Apple iPhone 16 Pro 128GB"
         price: "89999"
         currency: "INR"
         link: "https://indiamart.com/iphone16pro"
+      # Laptop extracts
+      https://amazon.com/macbookpro:
+        productName: "Apple MacBook Pro 14-inch"
+        price: "1999"
+        currency: "USD"
+        link: "https://amazon.com/macbookpro"
+      https://bestbuy.com/macbookpro:
+        productName: "Apple MacBook Pro 14-inch - Space Gray"
+        price: "1999"
+        currency: "USD"
+        link: "https://bestbuy.com/macbookpro"
+      https://apple.com/macbookpro:
+        productName: "Apple MacBook Pro 14-inch - Silver"
+        price: "1999"
+        currency: "USD"
+        link: "https://apple.com/macbookpro"
+      https://flipkart.com/macbookpro:
+        productName: "Apple MacBook Pro 14-inch"
+        price: "159999"
+        currency: "INR"
+        link: "https://flipkart.com/macbookpro"
+      https://croma.com/macbookpro:
+        productName: "Apple MacBook Pro 14-inch"
+        price: "159999"
+        currency: "INR"
+        link: "https://croma.com/macbookpro"
+      https://reliancedigital.in/macbookpro:
+        productName: "Apple MacBook Pro 14-inch"
+        price: "159999"
+        currency: "INR"
+        link: "https://reliancedigital.in/macbookpro"
+      https://amazon.in/macbookpro:
+        productName: "Apple MacBook Pro 14-inch"
+        price: "159999"
+        currency: "INR"
+        link: "https://amazon.in/macbookpro"
+      # Sports extracts
+      https://amazon.com/nikeairmax:
+        productName: "Nike Air Max 270"
+        price: "150"
+        currency: "USD"
+        link: "https://amazon.com/nikeairmax"
+      https://bestbuy.com/nikeairmax:
+        productName: "Nike Air Max 270 - Black"
+        price: "150"
+        currency: "USD"
+        link: "https://bestbuy.com/nikeairmax"
+      https://nike.com/airmax270:
+        productName: "Nike Air Max 270"
+        price: "150"
+        currency: "USD"
+        link: "https://nike.com/airmax270"
+      https://flipkart.com/nikeairmax:
+        productName: "Nike Air Max 270"
+        price: "12999"
+        currency: "INR"
+        link: "https://flipkart.com/nikeairmax"
+      https://croma.com/nikeairmax:
+        productName: "Nike Air Max 270"
+        price: "12999"
+        currency: "INR"
+        link: "https://croma.com/nikeairmax"
+      https://reliancedigital.in/nikeairmax:
+        productName: "Nike Air Max 270"
+        price: "12999"
+        currency: "INR"
+        link: "https://reliancedigital.in/nikeairmax"
+      https://amazon.in/nikeairmax:
+        productName: "Nike Air Max 270"
+        price: "12999"
+        currency: "INR"
+        link: "https://amazon.in/nikeairmax"
     mock_data_path: "mocks/extracts/"
     
   validator:
     use_mock: true
     mock_validations:
-      - query:
-          brand: "Apple"
-          model: "iPhone 16 Pro"
-          storage: "128GB"
-          category: "Smartphone"
-        product:
-          productName: "Apple iPhone 16 Pro 128GB"
-          price: "999"
-          currency: "USD"
-          link: "https://amazon.com/iphone16pro"
-        is_valid: true
-      - query:
-          brand: "Apple"
-          model: "iPhone 16 Pro"
-          storage: "128GB"
-          category: "Smartphone"
-        product:
-          productName: "Apple iPhone 16 Pro 128GB - Silver"
-          price: "979"
-          currency: "USD"
-          link: "https://bestbuy.com/iphone16pro"
-        is_valid: true
-      - query:
-          brand: "Apple"
-          model: "iPhone 16 Pro"
-          storage: "128GB"
-          category: "Smartphone"
-        product:
-          productName: "Apple iPhone 16 Mini"
-          price: "899"
-          currency: "USD"
-          link: "https://example.com/iphone16mini"
-        is_valid: false
-      - query:
-          brand: "Apple"
-          model: "iPhone 16 Pro"
-          storage: "128GB"
-          category: "Smartphone"
-        product:
-          productName: "Samsung Galaxy S24"
-          price: "999"
-          currency: "USD"
-          link: "https://example.com/galaxys24"
-        is_valid: false
-      - query:
-          brand: "Apple"
-          model: "iPhone 16 Pro"
-          storage: "128GB"
-          category: "Smartphone"
-        product:
-          productName: "Apple iPhone 16 Pro 256GB"
-          price: "1099"
-          currency: "USD"
-          link: "https://example.com/iphone16pro256"
-        is_valid: false
-      - query:
-          brand: "Apple"
-          model: "iPhone 16 Pro"
-          storage: "128GB"
-          category: "Smartphone"
-        product:
-          productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://flipkart.com/iphone16pro"
-        is_valid: true
-      - query:
-          brand: "Apple"
-          model: "iPhone 16 Pro"
-          storage: "128GB"
-          category: "Smartphone"
-        product:
-          productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://croma.com/iphone16pro"
-        is_valid: true
-      - query:
-          brand: "Apple"
-          model: "iPhone 16 Pro"
-          storage: "128GB"
-          category: "Smartphone"
-        product:
-          productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://reliancedigital.in/iphone16pro"
-        is_valid: true
-      - query:
-          brand: "Apple"
-          model: "iPhone 16 Pro"
-          storage: "128GB"
-          category: "Smartphone"
-        product:
-          productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://paytmmall.com/iphone16pro"
-        is_valid: true
-      - query:
-          brand: "Apple"
-          model: "iPhone 16 Pro"
-          storage: "128GB"
-          category: "Smartphone"
-        product:
-          productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://snapdeal.com/iphone16pro"
-        is_valid: true
-      - query:
-          brand: "Apple"
-          model: "iPhone 16 Pro"
-          storage: "128GB"
-          category: "Smartphone"
-        product:
-          productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://shopclues.com/iphone16pro"
-        is_valid: true
-      - query:
-          brand: "Apple"
-          model: "iPhone 16 Pro"
-          storage: "128GB"
-          category: "Smartphone"
-        product:
-          productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://indiamart.com/iphone16pro"
-        is_valid: true
+      smartphone:
+        - url: "https://amazon.com/iphone16pro"
+          valid: true
+        - url: "https://bestbuy.com/iphone16pro"
+          valid: true
+        - url: "https://apple.com/iphone16pro"
+          valid: true
+        - url: "https://flipkart.com/iphone16pro"
+          valid: true
+        - url: "https://croma.com/iphone16pro"
+          valid: true
+        - url: "https://reliancedigital.in/iphone16pro"
+          valid: true
+        - url: "https://amazon.in/iphone16pro"
+          valid: true
+      laptop:
+        - url: "https://amazon.com/macbookpro"
+          valid: true
+        - url: "https://bestbuy.com/macbookpro"
+          valid: true
+        - url: "https://apple.com/macbookpro"
+          valid: true
+        - url: "https://flipkart.com/macbookpro"
+          valid: true
+        - url: "https://croma.com/macbookpro"
+          valid: true
+        - url: "https://reliancedigital.in/macbookpro"
+          valid: true
+        - url: "https://amazon.in/macbookpro"
+          valid: true
+      sports:
+        - url: "https://amazon.com/nikeairmax"
+          valid: true
+        - url: "https://bestbuy.com/nikeairmax"
+          valid: true
+        - url: "https://nike.com/airmax270"
+          valid: true
+        - url: "https://flipkart.com/nikeairmax"
+          valid: true
+        - url: "https://croma.com/nikeairmax"
+          valid: true
+        - url: "https://reliancedigital.in/nikeairmax"
+          valid: true
+        - url: "https://amazon.in/nikeairmax"
+          valid: true
+        - url: "https://paytmmall.com/nikeairmax"
+          valid: true
+        - url: "https://snapdeal.com/nikeairmax"
+          valid: true
     mock_data_path: "mocks/validated_data.yaml"
     
   deduplicator:
     use_mock: true
-    mock_deduplicated_results:
-      input_products:
+    mock_deduplicated:
+      smartphone:
         - productName: "Apple iPhone 16 Pro 128GB"
           price: "999"
           currency: "USD"
           link: "https://amazon.com/iphone16pro"
         - productName: "Apple iPhone 16 Pro 128GB - Silver"
-          price: "999"
-          currency: "USD"
-          link: "https://bestbuy.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "999"
-          currency: "USD"
-          link: "https://apple.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB - Natural Titanium"
-          price: "999"
-          currency: "USD"
-          link: "https://apple.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://flipkart.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://croma.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://reliancedigital.in/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://paytmmall.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://snapdeal.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://shopclues.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://indiamart.com/iphone16pro"
-      output_products:
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "999"
-          currency: "USD"
-          link: "https://amazon.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB - Silver"
-          price: "999"
+          price: "979"
           currency: "USD"
           link: "https://bestbuy.com/iphone16pro"
         - productName: "Apple iPhone 16 Pro 128GB - Natural Titanium"
           price: "999"
           currency: "USD"
           link: "https://apple.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://flipkart.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://croma.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://reliancedigital.in/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://paytmmall.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://snapdeal.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://shopclues.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://indiamart.com/iphone16pro"
+      laptop:
+        - productName: "Apple MacBook Pro 14-inch"
+          price: "1999"
+          currency: "USD"
+          link: "https://amazon.com/macbookpro"
+        - productName: "Apple MacBook Pro 14-inch - Space Gray"
+          price: "1999"
+          currency: "USD"
+          link: "https://bestbuy.com/macbookpro"
+        - productName: "Apple MacBook Pro 14-inch - Silver"
+          price: "1999"
+          currency: "USD"
+          link: "https://apple.com/macbookpro"
+      sports:
+        - productName: "Nike Air Max 270"
+          price: "150"
+          currency: "USD"
+          link: "https://amazon.com/nikeairmax"
+        - productName: "Nike Air Max 270 - Black"
+          price: "150"
+          currency: "USD"
+          link: "https://bestbuy.com/nikeairmax"
     mock_data_path: "mocks/deduplicated_data.yaml"
     
   ranker:
     use_mock: true
-    mock_ranked_results:
-      input_products:
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "999"
-          currency: "USD"
-          link: "https://apple.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB - Silver"
-          price: "979"
-          currency: "USD"
-          link: "https://bestbuy.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB - Natural Titanium"
-          price: "999"
-          currency: "USD"
-          link: "https://apple.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB - Space Black"
-          price: "1049"
-          currency: "USD"
-          link: "https://walmart.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://flipkart.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://croma.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://reliancedigital.in/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://paytmmall.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://snapdeal.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://shopclues.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://indiamart.com/iphone16pro"
-      output_products:
+    mock_ranked:
+      smartphone:
         - productName: "Apple iPhone 16 Pro 128GB - Silver"
           price: "979"
           currency: "USD"
@@ -424,72 +439,74 @@ modules:
         - productName: "Apple iPhone 16 Pro 128GB"
           price: "999"
           currency: "USD"
-          link: "https://apple.com/iphone16pro"
+          link: "https://amazon.com/iphone16pro"
         - productName: "Apple iPhone 16 Pro 128GB - Natural Titanium"
           price: "999"
           currency: "USD"
           link: "https://apple.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB - Space Black"
-          price: "1049"
+      laptop:
+        - productName: "Apple MacBook Pro 14-inch"
+          price: "1999"
           currency: "USD"
-          link: "https://walmart.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://flipkart.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://croma.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://reliancedigital.in/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://paytmmall.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://snapdeal.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://shopclues.com/iphone16pro"
-        - productName: "Apple iPhone 16 Pro 128GB"
-          price: "89999"
-          currency: "INR"
-          link: "https://indiamart.com/iphone16pro"
+          link: "https://amazon.com/macbookpro"
+        - productName: "Apple MacBook Pro 14-inch - Space Gray"
+          price: "1999"
+          currency: "USD"
+          link: "https://bestbuy.com/macbookpro"
+        - productName: "Apple MacBook Pro 14-inch - Silver"
+          price: "1999"
+          currency: "USD"
+          link: "https://apple.com/macbookpro"
+      sports:
+        - productName: "Nike Air Max 270"
+          price: "150"
+          currency: "USD"
+          link: "https://amazon.com/nikeairmax"
+        - productName: "Nike Air Max 270 - Black"
+          price: "150"
+          currency: "USD"
+          link: "https://bestbuy.com/nikeairmax"
     mock_data_path: "mocks/ranked_results.yaml"
     
   orchestrator:
-    use_mock: false  # Orchestrator always uses real logic
-    mock_product_list:
-      - productName: "Apple iPhone 16 Pro 128GB"
-        price: "999"
-        currency: "USD"
-        link: "https://apple.com/iphone16pro"
-      - productName: "Apple iPhone 16 Pro 128GB Silver"
-        price: "979"
-        currency: "USD"
-        link: "https://bestbuy.com/iphone16pro"
-      - productName: "Apple iPhone 16 Pro 128GB Space Black"
-        price: "1049"
-        currency: "USD"
-        link: "https://walmart.com/iphone16pro"
-      - productName: "Apple iPhone 16 Pro 128GB"
-        price: "89999"
-        currency: "INR"
-        link: "https://flipkart.com/iphone16pro"
-      - productName: "Apple iPhone 16 Pro 128GB"
-        price: "89999"
-        currency: "INR"
-        link: "https://croma.com/iphone16pro"
-      - productName: "Apple iPhone 16 Pro 128GB"
-        price: "89999"
-        currency: "INR"
-        link: "https://reliancedigital.in/iphone16pro"
+    use_mock: true
+    mock_product_lists:
+      smartphone:
+        - productName: "Apple iPhone 16 Pro 128GB - Silver"
+          price: "979"
+          currency: "USD"
+          link: "https://bestbuy.com/iphone16pro"
+        - productName: "Apple iPhone 16 Pro 128GB"
+          price: "999"
+          currency: "USD"
+          link: "https://amazon.com/iphone16pro"
+        - productName: "Apple iPhone 16 Pro 128GB - Natural Titanium"
+          price: "999"
+          currency: "USD"
+          link: "https://apple.com/iphone16pro"
+      laptop:
+        - productName: "Apple MacBook Pro 14-inch"
+          price: "1999"
+          currency: "USD"
+          link: "https://amazon.com/macbookpro"
+        - productName: "Apple MacBook Pro 14-inch - Space Gray"
+          price: "1999"
+          currency: "USD"
+          link: "https://bestbuy.com/macbookpro"
+        - productName: "Apple MacBook Pro 14-inch - Silver"
+          price: "1999"
+          currency: "USD"
+          link: "https://apple.com/macbookpro"
+      sports:
+        - productName: "Nike Air Max 270"
+          price: "150"
+          currency: "USD"
+          link: "https://amazon.com/nikeairmax"
+        - productName: "Nike Air Max 270 - Black"
+          price: "150"
+          currency: "USD"
+          link: "https://bestbuy.com/nikeairmax"
+    mock_data_path: "mocks/orchestrator_results.yaml"
 
 # Global settings
 settings:

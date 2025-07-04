@@ -90,32 +90,30 @@ class SiteSelector:
             self.config = config
             
         self.use_mock = self.config.get('modules', {}).get('site_selector', {}).get('use_mock', True)
+        self.sites_by_country_and_category = self.config.get('modules', {}).get('site_selector', {}).get('sites_by_country_and_category', {})
+        # Fallback for backward compatibility
         self.sites_by_country = self.config.get('modules', {}).get('site_selector', {}).get('sites_by_country', {})
-        # Add comprehensive India support
-        if 'IN' not in self.sites_by_country:
-            self.sites_by_country['IN'] = [
-                'amazon.in',
-                'flipkart.com', 
-                'croma.com',
-                'reliancedigital.in',
-                'paytmmall.com',
-                'snapdeal.com',
-                'shopclues.com',
-                'indiamart.com'
-            ]
     
-    def select_sources(self, country: str) -> List[str]:
+    def select_sources(self, country: str, category: str = None) -> List[str]:
         """
-        Select e-commerce sites to search for the given country.
+        Select e-commerce sites to search for the given country and category.
         
         Args:
             country (str): Country code (e.g., 'US', 'IN', 'UK')
+            category (str): Product category (e.g., 'Smartphone', 'Laptop', 'Sports')
             
         Returns:
             List[str]: List of e-commerce site URLs to search
         """
         if self.use_mock:
-            # Return mock sites from config
+            # Try category-specific sites first
+            if self.sites_by_country_and_category and category:
+                country_sites = self.sites_by_country_and_category.get(country, {})
+                category_sites = country_sites.get(category, [])
+                if category_sites:
+                    return category_sites
+            
+            # Fallback to country-only sites for backward compatibility
             return self.sites_by_country.get(country, [])
         else:
             # TODO: Real implementation would use database or API
