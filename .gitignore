@@ -162,10 +162,6 @@ temp/
 .env.production
 secrets.json
 
-# Cache directories
-.cache/
-cache/
-
 # Backup files
 *.bak
 *.backup

@@ -12,6 +12,7 @@ from src.extractor.interface import Extractor
 from src.validator.interface import Validator
 from src.deduplicator.interface import Deduplicator
 from src.ranker.interface import Ranker
+from src.cache.interface import create_cache_manager
 
 
 class Orchestrator:
@@ -42,6 +43,8 @@ class Orchestrator:
         self.validator = Validator(self.config)
         self.deduplicator = Deduplicator(self.config)
         self.ranker = Ranker(self.config)
+        # Initialize cache manager
+        self.cache_manager = create_cache_manager(self.config)
         
     def run(self, user_input: dict) -> List[Dict[str, Any]]:
         """
@@ -58,6 +61,12 @@ class Orchestrator:
         query = user_input.get('query', '')
         
         print(f"🚀 Starting price intelligence pipeline for: {query} in {country}")
+        
+        # Check cache for results
+        cached_results = self.cache_manager.get_cached_query_results(query, country)
+        if cached_results is not None:
+            print(f"⚡ Returning cached results for: {query} in {country}")
+            return cached_results
         
         # Step 1: Normalize the query
         print("📝 Step 1: Normalizing query...")
@@ -117,6 +126,9 @@ class Orchestrator:
         print("🏆 Step 8: Ranking products...")
         ranked_products = self.ranker.rank(deduped_products)
         print(f"   Ranked {len(ranked_products)} products")
+        
+        # Cache the results
+        self.cache_manager.cache_query_results(query, country, ranked_products)
         
         print(f"✅ Pipeline complete! Returning {len(ranked_products)} ranked products")
         return ranked_products
