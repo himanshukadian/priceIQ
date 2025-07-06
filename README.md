@@ -314,6 +314,20 @@ chmod +x run.sh
 streamlit run streamlit_app.py
 ```
 
+## 📸 Application Screenshots
+
+### Main Interface
+![Main Page](snapshots/phase1/main_page.png)
+
+### Search Results Examples
+![Query 1 - iPhone 16 Pro](snapshots/phase1/query_1.png)
+![Query 2 - MacBook Pro](snapshots/phase1/query_2.png)
+![Query 3 - Nike Air Max 270](snapshots/phase1/query_3.png)
+![Query 4 - Samsung Galaxy S24](snapshots/phase1/query_4.png)
+
+### Documentation
+![Documentation](snapshots/phase1/doc.png)
+
 ## 🧩 Category-Aware Flow
 
 - **Query Normalizer** returns category-specific attributes based on product type
