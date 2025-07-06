@@ -747,6 +747,11 @@ For questions or issues:
 3. Run `make test` to verify setup
 4. Create an issue with detailed description
 
+## 🌐 Live Demo & Documentation
+
+- **Streamlit App (Price Search):** [https://priceiq.streamlit.app/?page=search](https://priceiq.streamlit.app/?page=search)
+- **Streamlit App (Implementation Plan):** [https://priceiq.streamlit.app/?page=plan](https://priceiq.streamlit.app/?page=plan)
+
 ---
 
 **Built with ❤️ for global price intelligence** 
