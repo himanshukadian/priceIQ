@@ -4,6 +4,13 @@ A modular, mock-first Python monorepo for global price intelligence with microse
 
 **Note:** Not all sites support all categories in every country. The platform is category-aware and robust to missing data for unsupported (site, category, product) combinations.
 
+## 🌐 Live Demo & Documentation
+
+- **Streamlit App (Price Search):** [https://priceiq.streamlit.app/?page=search](https://priceiq.streamlit.app/?page=search)
+- **Streamlit App (Implementation Plan):** [https://priceiq.streamlit.app/?page=plan](https://priceiq.streamlit.app/?page=plan)
+
+---
+
 ## 🏗️ Architecture
 
 The platform follows a modular microservice architecture with clear separation of concerns:
@@ -746,12 +753,5 @@ For questions or issues:
 2. Review the configuration files
 3. Run `make test` to verify setup
 4. Create an issue with detailed description
-
-## 🌐 Live Demo & Documentation
-
-- **Streamlit App (Price Search):** [https://priceiq.streamlit.app/?page=search](https://priceiq.streamlit.app/?page=search)
-- **Streamlit App (Implementation Plan):** [https://priceiq.streamlit.app/?page=plan](https://priceiq.streamlit.app/?page=plan)
-
----
 
 **Built with ❤️ for global price intelligence** 
