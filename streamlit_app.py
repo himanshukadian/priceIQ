@@ -28,10 +28,19 @@ st.set_page_config(
 
 # Initialize orchestrator
 @st.cache_resource
-def get_orchestrator():
-    """Initialize and cache the orchestrator to avoid reloading."""
+def get_orchestrator_cached(_use_mock_normalizer=True):
+    """Initialize and cache the orchestrator with dynamic configuration."""
+    import yaml
+    
+    # Load base configuration
     config_path = os.path.join("config", "phase1_config.yaml")
-    return Orchestrator(config_path)
+    with open(config_path, 'r') as f:
+        config = yaml.safe_load(f)
+    
+    # Override the query normalizer setting
+    config['modules']['query_normalizer']['use_mock'] = _use_mock_normalizer
+    
+    return Orchestrator(config)
 
 def format_price(price, currency):
     """Format price with currency symbol."""
@@ -47,6 +56,69 @@ def format_price(price, currency):
 def create_clickable_link(url, text):
     """Create a clickable link for Streamlit."""
     return f"[{text}]({url})"
+
+def show_normalization_comparison(query, current_use_mock):
+    """Show comparison between mock and real query normalization."""
+    with st.expander("🔍 Query Normalization Comparison", expanded=False):
+        st.markdown("**Compare how different modes process your query:**")
+        
+        col1, col2 = st.columns(2)
+        
+        # Get both normalizations
+        mock_orchestrator = get_orchestrator_cached(True)
+        real_orchestrator = get_orchestrator_cached(False)
+        
+        mock_result = mock_orchestrator.query_normalizer.normalize(query)
+        real_result = real_orchestrator.query_normalizer.normalize(query)
+        
+        with col1:
+            st.markdown("**🎭 Mock Mode Result**")
+            if current_use_mock:
+                st.success("✅ Currently Active")
+            st.json(mock_result)
+        
+        with col2:
+            st.markdown("**🧠 Real Mode Result**")
+            if not current_use_mock:
+                st.success("✅ Currently Active")
+            st.json(real_result)
+        
+        # Highlight differences
+        st.markdown("**Key Differences:**")
+        differences = []
+        
+        for key in set(mock_result.keys()) | set(real_result.keys()):
+            mock_val = mock_result.get(key, "Not detected")
+            real_val = real_result.get(key, "Not detected")
+            
+            if mock_val != real_val:
+                differences.append(f"• **{key}**: Mock=`{mock_val}` vs Real=`{real_val}`")
+        
+        if differences:
+            for diff in differences:
+                st.markdown(diff)
+        else:
+            st.success("✅ Both modes produced identical results!")
+        
+        # Show advantages
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("**🎭 Mock Mode Advantages:**")
+            st.markdown("""
+            - Fast and consistent
+            - Predefined high-quality results
+            - No parsing errors
+            - Perfect for demos
+            """)
+        
+        with col2:
+            st.markdown("**🧠 Real Mode Advantages:**")
+            st.markdown("""
+            - Handles any product query
+            - Extracts actual attributes
+            - Adapts to new products
+            - Production-ready intelligence
+            """)
 
 def show_implementation_plan():
     """Display the full implementation plan documentation as a single scrollable page, hardcoded (no file dependency)."""
@@ -515,6 +587,36 @@ def main():
     # Render the selected page
     if tab_keys[selected_tab] == "search":
         with st.sidebar:
+            # Query Normalizer Toggle
+            st.header("⚙️ Query Processing Mode")
+            use_mock_normalizer = st.toggle(
+                "Use Mock Query Normalizer",
+                value=st.session_state.get('use_mock_normalizer', True),
+                help="Switch between Mock (demo) and Real (production) query processing",
+                key='use_mock_normalizer'
+            )
+            
+            # Show current mode with details
+            if use_mock_normalizer:
+                st.info("🎭 **Mock Mode**: Using predefined query patterns")
+                st.markdown("""
+                **What it does:**
+                - Returns hardcoded product attributes
+                - Perfect for demos and testing
+                - Fast and consistent results
+                """)
+            else:
+                st.success("🧠 **Real Mode**: Using AI-powered regex extraction")
+                st.markdown("""
+                **What it does:**
+                - Intelligently extracts brands, models, specs
+                - Handles any product type or variant
+                - Production-ready parsing
+                - Try: "Dell XPS 15 Intel i7 32GB 1TB" 
+                """)
+            
+            st.markdown("---")
+            
             st.header("🔍 Example Queries")
             example_labels = [ex["label"] for ex in EXAMPLES]
             example_choice = st.selectbox(
@@ -582,6 +684,13 @@ def show_price_search(example_choice=None):
             help="Choose your target market for price comparison"
         )
     
+    # Show current mode indicator
+    use_mock_normalizer = st.session_state.get('use_mock_normalizer', True)
+    if use_mock_normalizer:
+        st.info("🎭 **Query Processing**: Mock Mode (Predefined patterns)")
+    else:
+        st.success("🧠 **Query Processing**: Real Mode (AI-powered extraction)")
+    
     # Search button
     if st.button("🔍 Search Prices", type="primary", use_container_width=True):
         if not query.strip():
@@ -591,9 +700,15 @@ def show_price_search(example_choice=None):
         # Show loading spinner
         with st.spinner("🔍 Searching for the best prices..."):
             try:
+                # Get use_mock setting from session state (will be set in sidebar)
+                use_mock_normalizer = st.session_state.get('use_mock_normalizer', True)
+                
                 # Get orchestrator and run search
-                orchestrator = get_orchestrator()
+                orchestrator = get_orchestrator_cached(use_mock_normalizer)
                 results = orchestrator.run({"query": query, "country": country})
+                
+                # Show query normalization comparison
+                show_normalization_comparison(query, use_mock_normalizer)
                 
                 # Display results
                 if results:
