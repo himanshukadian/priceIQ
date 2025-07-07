@@ -6,6 +6,7 @@ Normalizes product queries for consistent processing across modules.
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional
 import yaml
+from .real_normalizer import RealQueryNormalizer
 
 
 class QueryNormalizerInterface(ABC):
@@ -63,106 +64,6 @@ class MockQueryNormalizer(QueryNormalizerInterface):
             }
 
 
-class RealQueryNormalizer(QueryNormalizerInterface):
-    """Real implementation of query normalizer."""
-    
-    def normalize_query(self, query: str, country: str) -> Dict[str, Any]:
-        """
-        Real implementation for query normalization.
-        This would use NLP techniques, product databases, etc.
-        """
-        # TODO: Implement real query normalization logic
-        # For now, return a basic normalized version
-        normalized = query.strip().replace(',', ' ').replace('  ', ' ')
-        
-        category = self._extract_category(normalized)
-        base_attrs = {
-            'normalized': normalized,
-            'brand': self._extract_brand(normalized),
-            'model': self._extract_model(normalized),
-            'category': category
-        }
-        
-        # Add category-specific attributes
-        if category == 'Smartphone':
-            base_attrs.update({
-                'storage': self._extract_storage(normalized),
-                'color': self._extract_color(normalized),
-                'screen_size': self._extract_screen_size(normalized)
-            })
-        elif category == 'Laptop':
-            base_attrs.update({
-                'storage': self._extract_storage(normalized),
-                'ram': self._extract_ram(normalized),
-                'screen_size': self._extract_screen_size(normalized),
-                'processor': self._extract_processor(normalized)
-            })
-        elif category == 'Sports':
-            base_attrs.update({
-                'size': self._extract_size(normalized),
-                'color': self._extract_color(normalized),
-                'type': self._extract_type(normalized)
-            })
-        
-        return base_attrs
-    
-    def _extract_brand(self, query: str) -> Optional[str]:
-        """Extract brand from query."""
-        # TODO: Implement brand extraction
-        return None
-    
-    def _extract_model(self, query: str) -> Optional[str]:
-        """Extract model from query."""
-        # TODO: Implement model extraction
-        return None
-    
-    def _extract_storage(self, query: str) -> Optional[str]:
-        """Extract storage capacity from query."""
-        # TODO: Implement storage extraction
-        return None
-    
-    def _extract_category(self, query: str) -> str:
-        """Extract product category from query."""
-        query_lower = query.lower()
-        if 'macbook' in query_lower or 'laptop' in query_lower:
-            return 'Laptop'
-        elif 'iphone' in query_lower or 'smartphone' in query_lower or 'phone' in query_lower:
-            return 'Smartphone'
-        elif 'nike' in query_lower or 'air max' in query_lower or 'sports' in query_lower or 'shoes' in query_lower or 'running' in query_lower:
-            return 'Sports'
-        else:
-            return 'Smartphone'  # Default fallback
-    
-    def _extract_color(self, query: str) -> Optional[str]:
-        """Extract color from query."""
-        # TODO: Implement color extraction
-        return None
-    
-    def _extract_screen_size(self, query: str) -> Optional[str]:
-        """Extract screen size from query."""
-        # TODO: Implement screen size extraction
-        return None
-    
-    def _extract_ram(self, query: str) -> Optional[str]:
-        """Extract RAM from query."""
-        # TODO: Implement RAM extraction
-        return None
-    
-    def _extract_processor(self, query: str) -> Optional[str]:
-        """Extract processor from query."""
-        # TODO: Implement processor extraction
-        return None
-    
-    def _extract_size(self, query: str) -> Optional[str]:
-        """Extract size from query."""
-        # TODO: Implement size extraction
-        return None
-    
-    def _extract_type(self, query: str) -> Optional[str]:
-        """Extract type from query."""
-        # TODO: Implement type extraction
-        return None
-
 
 class QueryNormalizer:
     """
@@ -182,6 +83,10 @@ class QueryNormalizer:
             self.config = config
         self.use_mock = self.config.get('modules', {}).get('query_normalizer', {}).get('use_mock', True)
         self.mock_outputs = self.config.get('modules', {}).get('query_normalizer', {}).get('mock_outputs', {})
+        
+        # Initialize real normalizer if not using mock
+        if not self.use_mock:
+            self.real_normalizer = RealQueryNormalizer()
 
     def normalize(self, query: str) -> dict:
         """
@@ -206,36 +111,6 @@ class QueryNormalizer:
             else:
                 # Default to smartphone for backward compatibility
                 return self.mock_outputs.get('smartphone', {}).copy()
-        
-        # Real logic would go here
-        # For now, return basic attributes based on category detection
-        query_lower = query.lower()
-        if 'macbook' in query_lower or 'laptop' in query_lower:
-            return {
-                "brand": None,
-                "model": None,
-                "storage": None,
-                "ram": None,
-                "screen_size": None,
-                "processor": None,
-                "category": "Laptop"
-            }
-        elif 'nike' in query_lower or 'air max' in query_lower or 'sports' in query_lower or 'shoes' in query_lower or 'running' in query_lower:
-            return {
-                "brand": None,
-                "model": None,
-                "size": None,
-                "color": None,
-                "type": None,
-                "category": "Sports"
-            }
         else:
-            # Default to smartphone attributes
-            return {
-                "brand": None,
-                "model": None,
-                "storage": None,
-                "color": None,
-                "screen_size": None,
-                "category": "Smartphone"
-            } 
+            # Use real implementation
+            return self.real_normalizer.normalize_query(query, country="US") 
