@@ -146,7 +146,8 @@ class RealQueryNormalizer:
         Returns:
             Dict containing normalized query and category-specific attributes
         """
-        normalized_query = query.strip().replace(',', ' ').replace('  ', ' ')
+        # Normalize query - remove commas, preserve original spacing exactly
+        normalized_query = query.strip().replace(',', '')
         query_lower = normalized_query.lower()
         
         # Extract category first
@@ -177,7 +178,8 @@ class RealQueryNormalizer:
                 'storage': storage,
                 'ram': self._extract_ram(query_lower),
                 'screen_size': self._extract_screen_size(query_lower),
-                'processor': self._extract_processor(query_lower)
+                'processor': self._extract_processor(query_lower),
+                'color': self._extract_color(query_lower)  # Add color for laptops too
             })
         elif category == 'Sports':
             base_attrs.update({
@@ -303,8 +305,9 @@ class RealQueryNormalizer:
         """Extract screen size from query."""
         # Pattern for screen sizes like "6.1 inch", "14-inch", "15.6""
         screen_patterns = [
-            r'\b(\d+\.?\d*)\s*(inch|inches|in|"|'')\b',
-            r'\b(\d+\.?\d*)-inch\b'
+            r'\b(\d+\.?\d*)\s*(inch|inches|in)\b',  # Standard inch patterns
+            r'\b(\d+\.?\d*)-inch\b',  # Dash-inch pattern
+            r'\b(\d+\.?\d*)"',  # Simple quote pattern
         ]
         
         for pattern in screen_patterns:
